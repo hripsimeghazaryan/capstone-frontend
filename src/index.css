@@ -1,0 +1,53 @@
+html, body {
+  margin: 0;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  margin: 0 36px;
+}
+
+.main-content .info {
+  padding: 20px;
+}
+
+.top-margin {
+  margin-top: 68px;
+}
+
+.form .form-component {
+  margin: 10px 0;
+}
+
+.form .form-component.radio-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.info {
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-list-component {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card-component {
+  margin: 15px 10px;
+}
+
+.account-info-container .info-type {
+  display: flex;
+  flex-direction: row;
+}
+
+

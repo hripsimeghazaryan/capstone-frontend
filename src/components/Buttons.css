@@ -1,0 +1,8 @@
+.button .css-sghohy-MuiButtonBase-root-MuiButton-root {
+    background-color: #aa00ff !important;
+    margin: 20px 15px;
+  }
+  
+  .button .css-sghohy-MuiButtonBase-root-MuiButton-root:hover {
+    background-color: #7f00be !important;
+  }
