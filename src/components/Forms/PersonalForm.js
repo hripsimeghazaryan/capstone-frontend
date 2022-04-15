@@ -8,29 +8,30 @@ import {
     Radio,
     Divider,
     FormLabel,
-    Paper
+    Paper, 
+    Input
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number";
-
+import AddIcon from '@mui/icons-material/Add';
 import './Forms.css';
-
+import Buttons from "../Buttons/Buttons";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-import Heading from "./Heading/Heading";
-
+import Heading from "../Heading/Heading";
 import moment from 'moment';
+import axios from "axios";
 
-function Register({step, handleNext}) {
+function Personal({step, handleNext}) {
     const { handleSubmit, control } = useForm();
-    const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+    const onSubmit = async (data) => {
+        //await axios.post("regiter/personal", data);
+        alert(data);
         handleNext(step);
     }
     
     return (
-        <Paper className="register-form" style={{padding: "20px"}}>
+        <Paper className="register-form">
             <Heading title={"Personal Information"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <Controller
@@ -107,31 +108,6 @@ function Register({step, handleNext}) {
                 rules={{ required: 'Email required' }}
                 />
 
-                <FormLabel>Gender</FormLabel>
-                <Controller
-                control={control}
-                name="gender"
-                render={({ field }) => {
-                    return (
-                        <RadioGroup 
-                        className="form-component radio-group"
-                        {...field}>
-                            <FormControlLabel
-                            value="male"
-                            control={<Radio />}
-                            label="Male"
-                            />
-                            <FormControlLabel
-                            value="female"
-                            control={<Radio />}
-                            label="Female"
-                            />
-                        </RadioGroup>
-                        );
-                    }}
-                rules={{ required: "Gender required" }}
-                />
-
                 <Controller
                 name="phone"
                 control={control}
@@ -185,6 +161,33 @@ function Register({step, handleNext}) {
                     />
                 </LocalizationProvider>
 
+                <Divider />
+
+                <FormLabel>Gender</FormLabel>
+                <Controller
+                control={control}
+                name="gender"
+                render={({ field }) => {
+                    return (
+                        <RadioGroup 
+                        className="form-component radio-group"
+                        {...field}>
+                            <FormControlLabel
+                            value="male"
+                            control={<Radio />}
+                            label="Male"
+                            />
+                            <FormControlLabel
+                            value="female"
+                            control={<Radio />}
+                            label="Female"
+                            />
+                        </RadioGroup>
+                        );
+                    }}
+                rules={{ required: "Gender required" }}
+                />
+
                 <FormLabel>Active Worker</FormLabel>
                 <Controller
                 rules={{ required: "Status required" }}
@@ -209,6 +212,27 @@ function Register({step, handleNext}) {
                         );
                     }}
                 />
+
+                <Divider /> 
+
+                <Controller
+                rules={{required: "Image required"}}
+                control={control}
+                name="image"
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <label htmlFor="upload-photo">
+                        <Input
+                            className="form-component"
+                            style={{ display: 'none' }}
+                            id="upload-photo"
+                            name="upload-photo"
+                            type="file"
+                        />
+
+                        <Buttons name={[<AddIcon />, "Upload"]} />
+                        </label>
+                    )}
+                />
                 <Divider />
                 <div className="button">
                     <Button type="submit" variant="contained" color="primary">
@@ -220,4 +244,4 @@ function Register({step, handleNext}) {
     );
 } 
 
-export default Register;
+export default Personal;

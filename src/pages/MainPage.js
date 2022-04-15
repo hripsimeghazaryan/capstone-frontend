@@ -1,8 +1,8 @@
 import { React } from "react";
 import { Box, Typography, Paper } from '@mui/material';
 import { Link } from "react-router-dom";
-import Buttons from "../components/Buttons/Buttons";
-import Heading from "../components/Heading/Heading";
+import Buttons from '../components/Buttons/Buttons';
+import Heading from '../components/Heading/Heading';
 import './MainPage.css';
 
 function MainPage () {
@@ -41,22 +41,16 @@ function MainPage () {
                         flexDirection: "column",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        minHeight: "80px"
+                        minHeight: "80px",
+                        marginTop: "25px"
                     }}
                     >
-                        <Paper>
-                            <Typography 
-                            component="subtitle1"
-                            >
-                                If you don't have an account please register.
-                            </Typography> 
-                            <Link to="/register" style={{ textDecoration: 'none' }}>
-                                <Buttons name={"Register"} />
-                            </Link>
-                            <Link to="/login" style={{ textDecoration: 'none' }}>
-                                <Buttons name={"Log In"} />
-                            </Link>
-                        </Paper>
+                        <Link to="/register" style={{ textDecoration: 'none' }}>
+                            <Buttons name={"Register"} />
+                        </Link>
+                        <Link to="/login" style={{ textDecoration: 'none' }}>
+                            <Buttons name={"Log In"} />
+                        </Link>
                     </Box>
                 </Box>                
             </Box>

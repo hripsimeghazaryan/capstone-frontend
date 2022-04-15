@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Checkbox,
   Grid,
@@ -9,14 +9,29 @@ import {
 import { Link } from "react-router-dom";
 import Buttons from '../components/Buttons/Buttons';
 import Heading from '../components/Heading/Heading';
+import axios from 'axios';
 
  
 function LogInPage() {
-    const [checked, setChecked] = React.useState(true);
+    const [checked, setChecked] = useState(true);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    }
+    
+      const handlePassChange = (event) => {
+        setPassword(event.target.value);
+      }
 
     const handleChange = (event) => {
       setChecked(event.target.checked);
     };
+
+    const handleLogIn = async () => {
+        const response = await axios.post();
+    }
 
     return(
         <Paper 
@@ -34,10 +49,20 @@ function LogInPage() {
             alignItems={'center'}
             >
                 <Grid item xs={12}>
-                    <TextField label="Email"></TextField>
+                    <TextField 
+                    type="email"
+                    label="Email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    ></TextField>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField label="Password" type={'password'}></TextField>
+                    <TextField 
+                    label="Password" 
+                    type={'password'}
+                    value={password}
+                    onChange={handlePassChange}
+                    ></TextField>
                 </Grid>
                 <Grid item xs={12}>
                     <FormControlLabel

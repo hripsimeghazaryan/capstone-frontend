@@ -1,21 +1,23 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
+import AddIcon from '@mui/icons-material/Add';
 import { 
     Paper,
     Button,
     Divider,
     TextField
 } from '@mui/material';
+import Heading from "../Heading/Heading";
+import Buttons from '../Buttons/Buttons';
+import './Forms.css';
 
-import Heading from "./Heading/Heading";
-
-function SkillsInfo({step, handleNext}) {
+function Skills({step, handleNext}) {
     const [indexes, setIndexes] = React.useState([]);
     const [counter, setCounter] = React.useState(1);
 
     const { control, handleSubmit } = useForm();
-    const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+    const onSubmit = async (data) => {
+        alert(data);
         handleNext(step);
     };
 
@@ -25,12 +27,9 @@ function SkillsInfo({step, handleNext}) {
     }
 
     return (
-        <Paper className="register-form">
+        <Paper className="register-form skills">
             <Heading title={"Skills"} divider={true} />
-            <div className="button">
-                <Button type="button" variant="contained" color="primary" onClick={addSkill}>Add Skill</Button>
-            </div>
-
+            <Buttons name={[<AddIcon />, "AddSkill"]} handleClick={addSkill} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 {indexes.map(index => {
                     return (
@@ -64,4 +63,4 @@ function SkillsInfo({step, handleNext}) {
     )
 }
 
-export default SkillsInfo;
+export default Skills;

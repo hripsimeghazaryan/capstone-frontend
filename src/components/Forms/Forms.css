@@ -1,0 +1,15 @@
+.register-form {
+    padding: 20px;
+}
+
+.skills .button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+
+
+[type="file"] {
+    color: #878787;
+}

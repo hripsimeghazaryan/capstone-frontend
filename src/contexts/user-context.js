@@ -1,12 +1,23 @@
-import { createContext } from 'react';
+import { createContext, useEffect, useState } from 'react';
+import axios from "axios";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+    const [userData, setUserData] = useState({});
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await axios.get("register/personal");
+            setUserData(data);
+        }
+        fetchData();
+    }, [])
+
     return (
-        <UserContext.Provider value="">
+        <UserContext.Provider value={userData}>
             {children}
-        </UserContext.Provider>
+        </UserContext.Provider> 
     )
 }
 

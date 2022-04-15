@@ -1,63 +1,81 @@
+import React from 'react';
 import { useForm, Controller } from "react-hook-form";
-import  { useNavigate } from 'react-router-dom';
-import * as React from "react";
 import {
-    Paper,
     TextField,
     Button,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    Divider,
-    FormLabel
+    Paper
 } from "@mui/material";
-
-import Heading from "./Heading/Heading";
-
+import './Forms.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import Heading from '../Heading/Heading';
 import moment from 'moment';
 
-function Experience() {
-    const navigate = useNavigate();
+function Education({step, handleNext}) {
     const { handleSubmit, control } = useForm();
-    const onSubmit = (data) => {
-        alert(JSON.stringify(data));
-        navigate("/home");
+    const onSubmit = async (data) => {
+        alert(data);
+        handleNext(step);
     }
 
     return (
         <Paper className="register-form">
-            <Heading title={"Experience"} divider={true} />
+            <Heading title={"Education"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                <FormLabel>Working Status</FormLabel>
-                <Controller
-                rules={{ required: true }}
-                control={control}
-                name="working-status"
-                render={({ field }) => {
-                    return (
-                        <RadioGroup 
-                        className="form-component radio-group"
-                        {...field}>
-                            <FormControlLabel
-                            value="yes"
-                            control={<Radio />}
-                            label="Yes"
-                            />
-                            <FormControlLabel
-                            value="no"
-                            control={<Radio />}
-                            label="No"
-                            />
-                        </RadioGroup>
-                        );
-                    }}
+            <Controller
+            name="education"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                className="form-component"
+                label="Degree"
+                variant="outlined"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
                 />
+                )}
+            rules={{ required: 'Degree required' }}
+            />
 
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Controller
+            name="major"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                className="form-component"
+                label="Major"
+                variant="outlined"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+                />
+                )}
+            />
+
+            <Controller
+            name="university"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                className="form-component"
+                label="University"
+                variant="outlined"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+                />
+                )}
+            />
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Controller
                     name="starting-date"
                     control={control}
@@ -121,52 +139,14 @@ function Experience() {
                     )}
                     />
                 </LocalizationProvider>
-
-                <Controller
-                name="job-title"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                    className="form-component"
-                    label="Job Title"
-                    variant="outlined"
-                    value={value}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    type="text"
-                    />
-                    )}
-                />
-
-                <Controller
-                name="job-description"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                    className="form-component"
-                    label="Job Description"
-                    variant="outlined"
-                    value={value}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    type="text"
-                    />
-                    )}
-                />
-
-                <Divider />
                 <div className="button">
                     <Button type="submit" variant="contained" color="primary">
-                        Submit
+                        Next
                     </Button>
-                </div>
+                </div> 
             </form>
         </Paper>
-    );
-} 
+    )
+}
 
-export default Experience;
+export default Education;

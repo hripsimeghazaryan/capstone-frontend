@@ -2,8 +2,7 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Buttons from "../components/Buttons/Buttons";
-
-import Register from "../components/RegisterPage";
+import Personal from "../components/Forms/PersonalForm";
 
 // import axios from "axios";
 
@@ -36,7 +35,7 @@ function AccountPage(props) {
                         )
                     })}
                 </div>
-                {personal && <Register disabled={!edible}/>}
+                {personal && <Personal disabled={!edible}/>}
             </Box>
             <Box className="edit-save-button">
                 {!edible ?

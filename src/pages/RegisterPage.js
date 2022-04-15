@@ -2,11 +2,10 @@ import { React, useState } from 'react';
 import Heading from '../components/Heading/Heading';
 import StepperComponent from '../components/Stepper/Stepper';
 import { Box } from '@mui/material';
-
-import Register from '../components/RegisterPage';
-import EducationInfo from '../components/EducationInfo';
-import SkillsInfo from '../components/SkillsInfo';
-import Experience from '../components/ExperienceInfo';
+import Personal from '../components/Forms/PersonalForm';
+import Education from '../components/Forms/EducationForm';
+import Skills from '../components/Forms/SkillsForm';
+import Experience from '../components/Forms/ExperienceForm';
 
 const steps = [
         "Personal Information",
@@ -18,11 +17,11 @@ const steps = [
 function getStepContent(step, handleNext) {
     switch (step) {
       case 0:
-        return <Register step={step} handleNext={handleNext} />;
+        return <Personal step={step} handleNext={handleNext} />;
       case 1:
-        return <EducationInfo step={step} handleNext={handleNext} />;
+        return <Education step={step} handleNext={handleNext} />;
       case 2:
-        return <SkillsInfo step={step} handleNext={handleNext}/>;
+        return <Skills step={step} handleNext={handleNext}/>;
       default:
         return <Experience />;
     }
