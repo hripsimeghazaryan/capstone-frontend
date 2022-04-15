@@ -1,19 +1,27 @@
 html, body {
   margin: 0;
+  /* background-image: url("./background.jpeg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; */
 }
 
-.main-content {
+.app-content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 0 36px;
 }
 
-.main-content .info {
+.app-content .info {
   padding: 20px;
 }
 
-.top-margin {
-  margin-top: 68px;
+.centered {
+  position: relative;
+  top: 16%
 }
 
 .form .form-component {
@@ -49,5 +57,3 @@ html, body {
   display: flex;
   flex-direction: row;
 }
-
-

@@ -1,16 +1,10 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
-import  { useNavigate } from 'react-router-dom';
 
 import {
     TextField,
     Button,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    Divider,
-    Typography,
-    FormLabel
+    Paper
 } from "@mui/material";
 
 
@@ -18,32 +12,22 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import Heading from "./Heading/Heading";
+
 import moment from 'moment';
 
 
-function EducationInfo(props) {
-    const navigate = useNavigate();
+function EducationInfo({step, handleNext}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = (data) => {
         alert(JSON.stringify(data));
-        navigate("/home");
+        handleNext(step);
     }
 
     return (
-        <div className="register-form">
-            {/* <Typography 
-            variant="h4" 
-            component="div" 
-            style={{
-                fontSize: 24, 
-                padding: "10px",
-                color: "rgba(0, 0, 0, 0.5)"
-            }}>
-                Education
-            </Typography>
-
-            <Divider />
-            <form className="form" onSubmit={handleSubmit(onSubmit)}> */}
+        <Paper className="register-form">
+            <Heading title={"Education"} divider={true} />
+            <form className="form" onSubmit={handleSubmit(onSubmit)}>
             <Controller
             name="education"
             control={control}
@@ -160,13 +144,13 @@ function EducationInfo(props) {
                     )}
                     />
                 </LocalizationProvider>
-                {/* <div className="button">
+                <div className="button">
                     <Button type="submit" variant="contained" color="primary">
-                        Submit
+                        Next
                     </Button>
-                </div> */}
-            {/* </form> */}
-        </div>
+                </div> 
+            </form>
+        </Paper>
     )
 }
 

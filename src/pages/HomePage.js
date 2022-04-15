@@ -1,8 +1,8 @@
 import { React } from 'react';
 // import axios from 'axios'; //useEffect, useState
-import CardComponent from '../components/Card';
+import CardComponent from '../components/Card/Card';
 
-function HomePage(props) {
+function HomePage() {
     const iterations = [0, 1, 2, 3, 4, 5];
     // const [data, setData] = useState([]);
 
@@ -15,9 +15,9 @@ function HomePage(props) {
     // }, []);
     return (
         <div className="card-list-component">
-            {iterations.map(() => {
+            {iterations.map((index) => {
                 return (
-                    <CardComponent />
+                    <CardComponent key={index} />
                 )
             })}
         </div>

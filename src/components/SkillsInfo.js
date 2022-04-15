@@ -1,48 +1,37 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
-import  { useNavigate } from 'react-router-dom';
 import { 
+    Paper,
     Button,
-    Typography,
     Divider,
     TextField
- } from '@mui/material';
+} from '@mui/material';
 
+import Heading from "./Heading/Heading";
 
-function SkillsInfo(props) {
+function SkillsInfo({step, handleNext}) {
     const [indexes, setIndexes] = React.useState([]);
-    const [counter, setCounter] = React.useState(0);
+    const [counter, setCounter] = React.useState(1);
 
     const { control, handleSubmit } = useForm();
     const onSubmit = (data) => {
         alert(JSON.stringify(data));
+        handleNext(step);
     };
 
     const addSkill = () => {
-        console.log(indexes);
         setIndexes(prevIndexes => [...prevIndexes, counter]);
         setCounter(prevCounter => prevCounter + 1);   
     }
 
     return (
-        <div className="register-form">
-            <Typography 
-            variant="h4" 
-            component="div" 
-            style={{
-                fontSize: 24, 
-                padding: "10px",
-                color: "rgba(0, 0, 0, 0.5)"
-            }}>
-                Set of Skills
-            </Typography>
-
-            <Divider />
+        <Paper className="register-form">
+            <Heading title={"Skills"} divider={true} />
             <div className="button">
                 <Button type="button" variant="contained" color="primary" onClick={addSkill}>Add Skill</Button>
             </div>
 
-            {/* <form className="form" onSubmit={handleSubmit(onSubmit)}> */}
+            <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 {indexes.map(index => {
                     return (
                         <Controller
@@ -64,15 +53,14 @@ function SkillsInfo(props) {
                         />
                     )
                 })}
-
                 <Divider />
-                {/* <div className="button">
+                <div className="button">
                     <Button type="submit" variant="contained" color="primary">
                         Next
                     </Button>
-                </div> */}
-            {/* </form> */}
-        </div>
+                </div>
+            </form>
+        </Paper>
     )
 }
 

@@ -1,0 +1,24 @@
+.button .css-sghohy-MuiButtonBase-root-MuiButton-root {
+    height: 44px;
+    margin: 5px !important;
+    background-color: #aa00ff !important;
+    margin: 0px 15px;
+    border-radius: 12px;
+    min-width: 64px;
+    padding: 0 36px;
+}
+  
+.button .css-sghohy-MuiButtonBase-root-MuiButton-root:hover {
+  background: 
+    linear-gradient(90deg,#0000 33%,rgba(255,255,255,0.3) 50%,#0000 66%)
+    #7f00be;
+  background-size:300% 100%;
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: right;    
+  }
+
+}

@@ -1,24 +1,27 @@
 import { React, useState } from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 
-import CardModal from './Modal';
+import CardModal from '../Modal/Modal';
 
-function CardComponent(props) {
+function CardComponent({key}) {
     const [open, setOpen] = useState(false);
     const handleModal = () => setOpen(!open);
 
     return(
         <Card 
+        key={key}
         className="card-component"
         sx={{ maxWidth: 345,
         display: 'flex',
-        flexDirection: 'row' }}
+        flexDirection: 'row',
+        background: "rgb(171, 71, 188, 0.1)",
+        ':hover': {
+            boxShadow: 20
+          } }}
         >
             <ButtonBase
             onClick={handleModal}
@@ -39,10 +42,6 @@ function CardComponent(props) {
                 </CardContent>
             </ButtonBase>
             <CardModal open={open} handleClose={handleModal}/>
-            {/* <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-            </CardActions> */}
         </Card>
     );
 }

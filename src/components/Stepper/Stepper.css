@@ -1,0 +1,17 @@
+.stepper-container {
+    margin: 20px 0;
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
+    color: #df78ef !important;
+}
+
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+    color: #790e8b !important;
+}
+
+.stepper-container svg {
+    height: 30px;
+    width: 30px;
+}

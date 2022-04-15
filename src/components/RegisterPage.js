@@ -1,5 +1,4 @@
 import { useForm, Controller } from "react-hook-form";
-import  { useNavigate } from 'react-router-dom';
 import * as React from "react";
 import {
     TextField,
@@ -8,43 +7,32 @@ import {
     FormControlLabel,
     Radio,
     Divider,
-    Typography,
-    FormLabel
+    FormLabel,
+    Paper
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number";
+
+import './Forms.css';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import Heading from "./Heading/Heading";
+
 import moment from 'moment';
 
-function Register(props) {
-    const navigate = useNavigate();
+function Register({step, handleNext}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = (data) => {
-        console.log(control);
         alert(JSON.stringify(data));
-        navigate("/education");
+        handleNext(step);
     }
-    const [value, setValue] = React.useState(null);
-
+    
     return (
-        <div className="register-form">
-            <Typography 
-            variant="h4" 
-            component="div" 
-            style={{
-                fontSize: 24, 
-                padding: "10px",
-                color: "rgba(0, 0, 0, 0.5)"
-            }}>
-                Personal information
-            </Typography>
-
-            <Divider />
+        <Paper className="register-form" style={{padding: "20px"}}>
+            <Heading title={"Personal Information"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
-
                 <Controller
                 name="firstName"
                 control={control}
@@ -100,9 +88,27 @@ function Register(props) {
                 rules={{ required: 'Email required' }}
                 />
 
+                <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                    className="form-component"
+                    label="Password"
+                    variant="outlined"
+                    value={value}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    type="password"
+                    />
+                    )}
+                rules={{ required: 'Email required' }}
+                />
+
                 <FormLabel>Gender</FormLabel>
                 <Controller
-                rules={{ required: true }}
                 control={control}
                 name="gender"
                 render={({ field }) => {
@@ -123,6 +129,7 @@ function Register(props) {
                         </RadioGroup>
                         );
                     }}
+                rules={{ required: "Gender required" }}
                 />
 
                 <Controller
@@ -174,12 +181,13 @@ function Register(props) {
                         }
                         />
                     )}
+                    rules={{ required: "Birth date required" }}
                     />
                 </LocalizationProvider>
 
                 <FormLabel>Active Worker</FormLabel>
                 <Controller
-                rules={{ required: true }}
+                rules={{ required: "Status required" }}
                 control={control}
                 name="status"
                 render={({ field }) => {
@@ -208,7 +216,7 @@ function Register(props) {
                     </Button>
                 </div>
             </form>
-        </div>
+        </Paper>
     );
 } 
 

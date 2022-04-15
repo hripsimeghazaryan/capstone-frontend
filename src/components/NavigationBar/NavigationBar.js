@@ -3,13 +3,15 @@ import {
     AppBar,
     Avatar
 } from '@mui/material';
+import './NavigationBar.css';
 
 function NavigationBar(props) {
-
     const { isLogged } = props;
 
     return(
-        <AppBar position="fixed" 
+        <AppBar 
+        className="navbar"
+        position="fixed" 
         style={{
             display: "flex",
             flexDirection: "row",

@@ -4,10 +4,11 @@ import {
   Grid,
   TextField,
   FormControlLabel,
-  Paper,
+  Paper
 } from '@mui/material';
 import { Link } from "react-router-dom";
-import Buttons from '../components/Buttons';
+import Buttons from '../components/Buttons/Buttons';
+import Heading from '../components/Heading/Heading';
 
  
 function LogInPage() {
@@ -18,42 +19,46 @@ function LogInPage() {
     };
 
     return(
-        <div style={{ padding: 30 }}>
-            <Paper>
-                <Grid
-                container
-                spacing={3}
-                direction={'column'}
-                justify={'center'}
-                alignItems={'center'}
-                >
-                    <Grid item xs={12}>
-                        <TextField label="Username"></TextField>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField label="Password" type={'password'}></TextField>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                        control={
-                            <Checkbox
-                            checked={checked}
-                            onChange={handleChange}
-                            label={'Keep me logged in'}
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                            />
-                        }
-                        label="Keep me logged in"
-                        />
-                    </Grid>
-                    <Grid item xs={12} className="button">
-                    <Link to="/home" style={{ textDecoration: 'none' }}>
-                        <Buttons name={"Log In"} />
-                    </Link>
-                    </Grid>
+        <Paper 
+        sx={{ 
+            minWidth: "256px",
+            padding: "30px",
+            boxShadow: 5
+        }}>
+            <Heading title={"Log In"} divider={true}/>
+            <Grid
+            container
+            spacing={3}
+            direction={'column'}
+            justify={'center'}
+            alignItems={'center'}
+            >
+                <Grid item xs={12}>
+                    <TextField label="Email"></TextField>
                 </Grid>
-            </Paper>
-        </div>
+                <Grid item xs={12}>
+                    <TextField label="Password" type={'password'}></TextField>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControlLabel
+                    control={
+                        <Checkbox
+                        checked={checked}
+                        onChange={handleChange}
+                        label={'Keep me logged in'}
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                    }
+                    label="Keep me logged in"
+                    />
+                </Grid>
+                <Grid item xs={12} className="button">
+                <Link to="/home" style={{ textDecoration: 'none' }}>
+                    <Buttons name={"Log In"} />
+                </Link>
+                </Grid>
+            </Grid>
+        </Paper>
     )
 }
 

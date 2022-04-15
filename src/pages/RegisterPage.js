@@ -1,79 +1,50 @@
 import { React, useState } from 'react';
-import Heading from '../components/Heading';
- 
-import Buttons from '../components/Buttons'; 
-import { Box, Paper } from '@mui/material';
-import { Routes, Route, useLocation, Link, Navigate } from "react-router-dom";
+import Heading from '../components/Heading/Heading';
+import StepperComponent from '../components/Stepper/Stepper';
+import { Box } from '@mui/material';
 
 import Register from '../components/RegisterPage';
 import EducationInfo from '../components/EducationInfo';
 import SkillsInfo from '../components/SkillsInfo';
 import Experience from '../components/ExperienceInfo';
 
-const components = [
-    {
-        title: "Personal Information",
-        component: <Register />,
-        router: "personal"
-    },
-    {
-        title: "Education",
-        component: <EducationInfo />,
-        router: "education"
-    },
-    {
-        title: "Skills",
-        component: <SkillsInfo />,
-        router: "skills"
-    },
-    {
-        title: "Experience",
-        component: <Experience />,
-        router: "experience"
-    }
+const steps = [
+        "Personal Information",
+        "Education",
+        "Skills",
+        "Experience",
 ];
 
-function RegisterPage(props) {
-    const location = useLocation();
-    const path = location.pathname;
-    const url = "http://localhost:3000/";
+function getStepContent(step, handleNext) {
+    switch (step) {
+      case 0:
+        return <Register step={step} handleNext={handleNext} />;
+      case 1:
+        return <EducationInfo step={step} handleNext={handleNext} />;
+      case 2:
+        return <SkillsInfo step={step} handleNext={handleNext}/>;
+      default:
+        return <Experience />;
+    }
+}
 
-    const [personal, setPersonal] = useState(false);
-    const [education, setEducation] = useState(false);
-    const [skills, setSkills] = useState(false);
-    const [experience, setExperience] = useState(false);
-    const [image, setImage] = useState(false);
+function RegisterPage() {
+    const [activeStep, setActiveStep] = useState(0);
 
-    const redirectTo = (router) => {
-        console.log(router);
-        return <Navigate to={`${path}/${router}`} />
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
     return (
-        <Paper>
-            <Heading title={"Registration forms"} />
-            <Box className="group-of-forms">
-                
-                {components.map((item) => {
-                    const title = item.title;
-                    const component = item.component;
-                    const router = item.router;
-                    return (
-                        <Link to={`${path}/${router}`} style={{ textDecoration: 'none' }}>
-                            <Buttons name={title} />
-                        </Link>
-                    )
-                })}
-            </Box>
-
-            <Routes>
-                <Route path={`${path}/personal`} to={<Register />} />
-                <Route path={`${path}/education`} to={<EducationInfo />} />
-                <Route path={`${path}/skills`} to={<SkillsInfo />} />
-                <Route path={`${path}/experience`} to={<Experience />} />
-            </Routes>
-
-        </Paper>
+        <Box sx={{width: "80%"}}>
+            <Heading title={"Registration forms"} divider={true}/>
+            <StepperComponent 
+            steps={steps} 
+            activeStep={activeStep} 
+            handleNext={handleNext} 
+            getStepContent={getStepContent} />
+            {getStepContent(activeStep, handleNext)}
+        </Box>
     )
 
 }

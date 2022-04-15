@@ -2,16 +2,17 @@ import { useForm, Controller } from "react-hook-form";
 import  { useNavigate } from 'react-router-dom';
 import * as React from "react";
 import {
+    Paper,
     TextField,
     Button,
     RadioGroup,
     FormControlLabel,
     Radio,
     Divider,
-    Typography,
     FormLabel
 } from "@mui/material";
-import MuiPhoneNumber from "material-ui-phone-number";
+
+import Heading from "./Heading/Heading";
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -19,30 +20,17 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import moment from 'moment';
 
-function Experience(props) {
+function Experience() {
     const navigate = useNavigate();
     const { handleSubmit, control } = useForm();
     const onSubmit = (data) => {
-        console.log(control);
         alert(JSON.stringify(data));
-        navigate("/education");
+        navigate("/home");
     }
-    const [value, setValue] = React.useState(null);
 
     return (
-        <div className="register-form">
-            <Typography 
-            variant="h4" 
-            component="div" 
-            style={{
-                fontSize: 24, 
-                padding: "10px",
-                color: "rgba(0, 0, 0, 0.5)"
-            }}>
-                Experience
-            </Typography>
-
-            <Divider />
+        <Paper className="register-form">
+            <Heading title={"Experience"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <FormLabel>Working Status</FormLabel>
                 <Controller
@@ -135,24 +123,6 @@ function Experience(props) {
                 </LocalizationProvider>
 
                 <Controller
-                name="lastName"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                    className="form-component"
-                    label="Last Name"
-                    variant="outlined"
-                    value={value}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    />
-                    )}
-                rules={{ required: 'Last name required' }}
-                />
-
-                <Controller
                 name="job-title"
                 control={control}
                 defaultValue=""
@@ -191,11 +161,11 @@ function Experience(props) {
                 <Divider />
                 <div className="button">
                     <Button type="submit" variant="contained" color="primary">
-                        Next
+                        Submit
                     </Button>
                 </div>
             </form>
-        </div>
+        </Paper>
     );
 } 
 
