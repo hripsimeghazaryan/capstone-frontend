@@ -3,39 +3,39 @@ import Heading from '../components/Heading/Heading';
 import StepperComponent from '../components/Stepper/Stepper';
 import { Box } from '@mui/material';
 import Personal from '../components/Forms/PersonalForm';
-import Education from '../components/Forms/EducationForm';
-import Skills from '../components/Forms/SkillsForm';
-import Experience from '../components/Forms/ExperienceForm';
+import Company from '../components/Forms/CompanyForm';
+import CompanyImages from '../components/Forms/CompanyImagesForm';
 
 const steps = [
         "Personal Information",
-        "Education",
-        "Skills",
-        "Experience",
+        "Company",
+        "Company Images"
 ];
 
 function getStepContent(step, handleNext) {
     switch (step) {
-      case 0:
-        return <Personal step={step} handleNext={handleNext} />;
-      case 1:
-        return <Education step={step} handleNext={handleNext} />;
-      case 2:
-        return <Skills step={step} handleNext={handleNext}/>;
-      default:
-        return <Experience />;
+        case 0:
+            return <Personal step={step} handleNext={handleNext} />;
+        case 1:
+            return <Company step={step} handleNext={handleNext} />;
+        default:
+            return <CompanyImages />
     }
 }
 
-function RegisterPage() {
+function AdminRegisterPage() {
     const [activeStep, setActiveStep] = useState(0);
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
+    const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    // useEffect(() => {
+    //     if(userType) {
+    //         return <Redirect to={"/home"} />
+    //     }
+    // })
 
     return (
-        <Box sx={{width: "80%"}}>
+        <Box sx={{width: "50%"}}>
             <Heading title={"Registration forms"} divider={true}/>
             <StepperComponent 
             steps={steps} 
@@ -45,7 +45,6 @@ function RegisterPage() {
             {getStepContent(activeStep, handleNext)}
         </Box>
     )
-
 }
 
-export default RegisterPage;
+export default AdminRegisterPage;

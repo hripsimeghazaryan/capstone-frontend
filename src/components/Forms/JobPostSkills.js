@@ -11,7 +11,7 @@ import Heading from "../Heading/Heading";
 import Buttons from '../Buttons/Buttons';
 import './Forms.css';
 
-function Skills({step, handleNext, disabled}) {
+function JobSkills({step, handleNext}) {
     const [indexes, setIndexes] = React.useState([]);
     const [counter, setCounter] = React.useState(1);
 
@@ -28,8 +28,8 @@ function Skills({step, handleNext, disabled}) {
 
     return (
         <Paper className="register-form skills">
-            <Heading title={"Skills"} divider={true} />
-            {!disabled && <Buttons name={[<AddIcon />, "AddSkill"]} handleClick={addSkill} />}
+            <Heading title={"Required Skills"} divider={true} />
+            <Buttons name={[<AddIcon />, "AddSkill"]} handleClick={addSkill} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                     {indexes.map(index => {
                         return (
@@ -40,7 +40,6 @@ function Skills({step, handleNext, disabled}) {
                             defaultValue=""
                             render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <TextField
-                                disabled={disabled}
                                 className="form-component"
                                 label="Skill"
                                 variant="outlined"
@@ -54,16 +53,14 @@ function Skills({step, handleNext, disabled}) {
                         )
                     })}
                 <Divider />
-                {!disabled && 
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
-                    </div> 
-                }
+                <div className="button">
+                    <Button type="submit" variant="contained" color="primary">
+                        Done
+                    </Button>
+                </div>
             </form>
         </Paper>
     )
 }
 
-export default Skills;
+export default JobSkills;

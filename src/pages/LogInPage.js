@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Checkbox,
   Grid,
@@ -6,9 +6,10 @@ import {
   FormControlLabel,
   Paper
 } from '@mui/material';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Buttons from '../components/Buttons/Buttons';
 import Heading from '../components/Heading/Heading';
+import './LogInPage.css';
 import axios from 'axios';
 
  
@@ -16,25 +17,29 @@ function LogInPage() {
     const [checked, setChecked] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-    }
+    // useEffect(() => {
+    //     if(userType) {
+    //         return <Redirect to={"/home"} />
+    //     }
+    // })
+
+    const handleEmailChange = (event) => setEmail(event.target.value);
     
-      const handlePassChange = (event) => {
-        setPassword(event.target.value);
-      }
+    const handlePassChange = (event) => setPassword(event.target.value);
 
-    const handleChange = (event) => {
-      setChecked(event.target.checked);
-    };
+    const handleChange = (event) => setChecked(event.target.checked);
 
     const handleLogIn = async () => {
-        const response = await axios.post();
+        const response = await axios.post("auth/login", {email, password});
+        return response;
+        navigate("/home");
     }
 
     return(
         <Paper 
+        className="login-form"
         sx={{ 
             minWidth: "256px",
             padding: "30px",
@@ -54,6 +59,7 @@ function LogInPage() {
                     label="Email"
                     value={email}
                     onChange={handleEmailChange}
+                    required
                     ></TextField>
                 </Grid>
                 <Grid item xs={12}>
@@ -62,6 +68,7 @@ function LogInPage() {
                     type={'password'}
                     value={password}
                     onChange={handlePassChange}
+                    required
                     ></TextField>
                 </Grid>
                 <Grid item xs={12}>

@@ -1,11 +1,16 @@
 import { React } from "react";
-import { Box, Typography, Paper } from '@mui/material';
-import { Link } from "react-router-dom";
+import { Box, Typography } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 import Buttons from '../components/Buttons/Buttons';
-import Heading from '../components/Heading/Heading';
 import './MainPage.css';
 
 function MainPage () {
+    const navigate = useNavigate()
+
+    const handleRegister = () => navigate("/register");
+
+    const handleLogIn = () => navigate("/login");
+
     return (
         <div 
         className="main" 
@@ -17,12 +22,12 @@ function MainPage () {
         }}>
             <Box className="main-container">
                 <Box className="main-content">
-                    <div>
+                    <div className="main-title component-top-margin">
                         <Typography className="main-title" variant="h1" component="h2">
                                 Welcome to MushRoom
                         </Typography>
                     </div>
-                    <div>
+                    <div className="main-description component-top-margin">
                         <Typography 
                         variant="h4"
                         component="h1"
@@ -30,12 +35,13 @@ function MainPage () {
                             textAlign: "center"
                         }}>
                             Here we can give you an opportunity to find
-                            a job to corresponding to your skills. 
+                            <br/>
+                            a job to corresponding to your needs. 
                         </Typography>
                     </div> 
                     <Box 
                     component="div"
-                    className="button"
+                    className="button component-top-margin"
                     sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -45,12 +51,9 @@ function MainPage () {
                         marginTop: "25px"
                     }}
                     >
-                        <Link to="/register" style={{ textDecoration: 'none' }}>
-                            <Buttons name={"Register"} />
-                        </Link>
-                        <Link to="/login" style={{ textDecoration: 'none' }}>
-                            <Buttons name={"Log In"} />
-                        </Link>
+                        <Buttons name={"Register"} handleClick={() => handleRegister()}/>
+                        <Buttons name={"Log In"} handleClick={() => handleLogIn()}/>
+
                     </Box>
                 </Box>                
             </Box>

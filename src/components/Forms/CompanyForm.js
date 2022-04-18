@@ -12,8 +12,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from '../Heading/Heading';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
-function Education({step, handleNext, disabled}) {
+function Company({step, handleNext, disabled}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = async (data) => {
         alert(data);
@@ -22,55 +23,37 @@ function Education({step, handleNext, disabled}) {
 
     return (
         <Paper className="register-form">
-            <Heading title={"Education"} divider={true} />
+            <Heading title={"Company"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
                     <Controller
-                    name="education"
+                    name="company-name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
                         className="form-component"
                         disabled={disabled}
-                        label="Degree"
+                        label="Company Name"
                         variant="outlined"
                         value={value}
                         onChange={onChange}
                         error={!!error}
                         helperText={error ? error.message : null}
                         />
-                        )}
-                    rules={{ required: 'Degree required' }}
+                    )}
+                    rules={{ required: 'Company name required' }}
                     />
 
                     <Controller
-                    name="major"
+                    name="description"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
                         className="form-component"
+                        label="Description"
                         disabled={disabled}
-                        label="Major"
-                        variant="outlined"
-                        value={value}
-                        onChange={onChange}
-                        error={!!error}
-                        helperText={error ? error.message : null}
-                        />
-                        )}
-                    />
-
-                    <Controller
-                    name="university"
-                    control={control}
-                    defaultValue=""
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        disabled={disabled}
-                        label="University"
                         variant="outlined"
                         value={value}
                         onChange={onChange}
@@ -82,7 +65,7 @@ function Education({step, handleNext, disabled}) {
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Controller
-                        name="starting-date"
+                        name="establishment-date"
                         control={control}
                         defaultValue={null}
                         render={({
@@ -90,9 +73,9 @@ function Education({step, handleNext, disabled}) {
                             fieldState: { error, invalid }
                         }) => (
                             <DatePicker
-                            label="Starting Date"
-                            disabled={disabled}
+                            label="Establishment Date"
                             disableFuture
+                            disabled={disabled}
                             value={value}
                             className="form-component"
                             onChange={(value) =>
@@ -101,56 +84,41 @@ function Education({step, handleNext, disabled}) {
                             renderInput={(params) => (
                                 <TextField
                                 className="form-component"
-                                error={invalid}
-                                helperText={invalid ? error.message : null}
-                                id="starting-date"
-                                variant="outlined"
-                                margin="dense"
-                                fullWidth
-                                color="primary"
-                                {...params}
+                                    error={invalid}
+                                    helperText={invalid ? error.message : null}
+                                    id="establishment-date"
+                                    variant="outlined"
+                                    margin="dense"
+                                    fullWidth
+                                    color="primary"
+                                    {...params}
                                 />
                             )}
                             />
                         )}
                         />
-                        <Controller
-                        name="ending-date"
-                        control={control}
-                        defaultValue={null}
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error, invalid }
-                        }) => (
-                            <DatePicker
-                            label="Ending Date"
-                            disabled={disabled}
-                            disableFuture
-                            className="form-component"
-                            value={value}
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                className="form-component"
-                                error={invalid}
-                                helperText={invalid ? error.message : null}
-                                id="ending-date"
-                                variant="outlined"
-                                margin="dense"
-                                fullWidth
-                                color="primary"
-                                {...params}
-                                />
-                                )}
-                            />
-                            )}
-                        />
                     </LocalizationProvider>
+
+                    <Controller
+                    name="url"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                        className="form-component"
+                        label="Company URL"
+                        disabled={disabled}
+                        variant="outlined"
+                        value={value}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        />
+                        )}
+                    />
                 </div>
                 <Divider />
-                {!disabled && 
+                {!disabled &&
                     <div className="button">
                         <Button type="submit" variant="contained" color="primary">
                             Done
@@ -162,4 +130,4 @@ function Education({step, handleNext, disabled}) {
     )
 }
 
-export default Education;
+export default Company;

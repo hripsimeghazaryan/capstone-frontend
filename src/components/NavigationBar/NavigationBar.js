@@ -3,10 +3,19 @@ import {
     AppBar,
     Avatar
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import './NavigationBar.css';
 
 function NavigationBar(props) {
     const { isLogged } = props;
+    const navigate = useNavigate();
+
+    const logged = true;
+
+    const handleAccount = () => {
+        navigate("/user-account");
+        //navigate("/admin-account")
+    }
 
     return(
         <AppBar 
@@ -21,8 +30,10 @@ function NavigationBar(props) {
             <Typography variant="h4" component="div" style={{fontSize: 24, padding: "10px"}}>
                 MushRoom
             </Typography>
-            {isLogged && 
-                <Avatar>H</Avatar>
+            {logged && 
+                <div style={{marginTop: "4px", marginRight: "4px"}} className="account-avatar">
+                    <Avatar className="user-avatar" onClick={() => handleAccount()} src="">H</Avatar>
+                </div>
             }            
         </AppBar>
     );

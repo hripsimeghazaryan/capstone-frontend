@@ -1,0 +1,12 @@
+.card-component {
+    margin: 15px 10px;
+}
+
+.card-component .card-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-component .card-image {
+    min-width: 24%;
+}

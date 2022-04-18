@@ -18,6 +18,11 @@
     justify-content: space-around;
 }
 
+.main-content .main-description {
+    text-align: center;
+    padding: 0 40px;
+}
+
 .main-content .button {
     display: flex;
     flex-direction: column;
@@ -34,4 +39,9 @@
 
 .main-content .main-title {
     color: #790e8b;
+    text-align: center;
+}
+
+.component-top-margin {
+    margin-top: 20px;
 }

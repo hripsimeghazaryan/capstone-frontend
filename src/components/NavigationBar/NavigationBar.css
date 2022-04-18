@@ -11,3 +11,13 @@
       background-position: right;    
     }
   }
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.user-avatar {
+  cursor: pointer;
+}
