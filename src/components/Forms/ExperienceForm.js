@@ -17,13 +17,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 import './Forms.css';
+import requests from "../../utils/requests";
 
 function Experience({disabled}) {
     const navigate = useNavigate();
     const { handleSubmit, control } = useForm();
     const onSubmit = async (data) => {
-        alert(data);
-        navigate("/home");
+        const response = await requests.sendRequest("experience-detail/experience", {method: "POST", body: data});
+        if(response.user_accoumt_id) {
+            navigate("/user-page");
+        }
     }
 
     return (
@@ -35,7 +38,7 @@ function Experience({disabled}) {
                     <Controller
                     rules={{ required: true }}
                     control={control}
-                    name="working-status"
+                    name="is_current_job"
                     render={({ field }) => {
                         return (
                             <RadioGroup 
@@ -43,15 +46,15 @@ function Experience({disabled}) {
                             {...field}>
                                 <FormControlLabel
                                 disabled={disabled}
-                                value="yes"
+                                value="working"
                                 control={<Radio />}
-                                label="Yes"
+                                label="Working"
                                 />
                                 <FormControlLabel
                                 disabled={disabled}
-                                value="no"
+                                value="unemployed"
                                 control={<Radio />}
-                                label="No"
+                                label="Unemployed"
                                 />
                             </RadioGroup>
                             );
@@ -60,7 +63,7 @@ function Experience({disabled}) {
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Controller
-                        name="starting-date"
+                        name="start_date"
                         control={control}
                         defaultValue={null}
                         render={({
@@ -93,7 +96,7 @@ function Experience({disabled}) {
                         )}
                         />
                         <Controller
-                        name="ending-date"
+                        name="end_date"
                         control={control}
                         defaultValue={null}
                         render={({
@@ -128,7 +131,7 @@ function Experience({disabled}) {
                     </LocalizationProvider>
 
                     <Controller
-                    name="job-title"
+                    name="job_title"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -145,9 +148,27 @@ function Experience({disabled}) {
                         />
                         )}
                     />
+                    <Controller
+                    name="company_name"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                        className="form-component"
+                        label="Company Name"
+                        disabled={disabled}
+                        variant="outlined"
+                        value={value}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        type="text"
+                        />
+                        )}
+                    />
 
                     <Controller
-                    name="job-description"
+                    name="description"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (

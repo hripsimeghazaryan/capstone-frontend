@@ -4,18 +4,11 @@ import axios from "axios";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+    //kanchel setUserData-n login i mej
     const [userData, setUserData] = useState({});
     
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await axios.get("register/personal");
-            setUserData(data);
-        }
-        fetchData();
-    }, [])
-
     return (
-        <UserContext.Provider value={userData}>
+        <UserContext.Provider value={{userData, setUserData}}>
             {children}
         </UserContext.Provider> 
     )

@@ -7,11 +7,9 @@ import {
     Divider
 } from "@mui/material";
 import './Forms.css';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import Heading from '../Heading/Heading';
-import moment from 'moment';
+
 import { useNavigate } from 'react-router-dom';
 
 function JobLocation({step, handleNext}) {
@@ -19,7 +17,7 @@ function JobLocation({step, handleNext}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = async (data) => {
         alert(data);
-        navigate("/admin-page");
+        handleNext(step);
     }
 
     return (
@@ -28,7 +26,7 @@ function JobLocation({step, handleNext}) {
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
                     <Controller
-                    name="company-name"
+                    name="street_address"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (

@@ -2,14 +2,27 @@ import React from 'react';
 import { Paper, Box, Typography } from '@mui/material';
 import Heading from '../components/Heading/Heading';
 import Buttons from '../components/Buttons/Buttons';
-import axios from 'axios';
+import requests from '../utils/requests';
 import { useNavigate } from 'react-router-dom';
 import './UserTypePage.css';
 
 function UserTypePage() {
     const navigate = useNavigate()
-    const handleAdmin = () => navigate("/admin-register");
-    const handleUser = () => navigate("/user-register");
+    // Admin send 1 
+    // seeker send 0
+    const handleAdmin = () => {
+        // const response = requests.sendRequest("/user-type", {method: "POST", body: {"user_type": "admin"}})
+        // if(response.code === "200") {
+            navigate("/admin-register")
+        //}
+    };
+    const handleUser = () => {
+        // const response = requests.sendRequest("/user-type", {method: "POST", body: {"user_type": "user"}})
+        // if(response.code === "200") {
+        //     navigate("/user-register");
+        // }
+        navigate("/user-register");
+    }
 
     return (
         <Box className="user-type-container">

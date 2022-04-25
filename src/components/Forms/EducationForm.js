@@ -12,12 +12,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from '../Heading/Heading';
 import moment from 'moment';
+import requests from "../../utils/requests";
 
 function Education({step, handleNext, disabled}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = async (data) => {
-        alert(data);
-        handleNext(step);
+        const response = await requests.sendRequest("education-detail/education", {method: "POST", body: data});
+        if(response.user_accoumt_id) {
+            handleNext(step);
+        }
     }
 
     return (
@@ -26,7 +29,7 @@ function Education({step, handleNext, disabled}) {
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
                     <Controller
-                    name="education"
+                    name="certification_degree_name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -41,7 +44,7 @@ function Education({step, handleNext, disabled}) {
                         helperText={error ? error.message : null}
                         />
                         )}
-                    rules={{ required: 'Degree required' }}
+                    rules={{ required: 'Education required' }}
                     />
 
                     <Controller
@@ -63,7 +66,7 @@ function Education({step, handleNext, disabled}) {
                     />
 
                     <Controller
-                    name="university"
+                    name="university_name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -82,7 +85,7 @@ function Education({step, handleNext, disabled}) {
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Controller
-                        name="starting-date"
+                        name="starting_date"
                         control={control}
                         defaultValue={null}
                         render={({
@@ -115,7 +118,7 @@ function Education({step, handleNext, disabled}) {
                         )}
                         />
                         <Controller
-                        name="ending-date"
+                        name="completion_date"
                         control={control}
                         defaultValue={null}
                         render={({

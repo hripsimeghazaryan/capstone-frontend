@@ -17,13 +17,17 @@ import { useNavigate } from 'react-router-dom';
 function Company({step, handleNext, disabled}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = async (data) => {
+        //const response = Requests.sendRequests("/user-account/register", {method: "POST", body: data});
+        // if(responde.code == "200") {
+        // handleNext(step);
+        // }
         alert(data);
         handleNext(step);
     }
 
     return (
         <Paper className="register-form">
-            <Heading title={"Company"} divider={true} />
+            <Heading title={"Company Information"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
                     <Controller
@@ -44,7 +48,7 @@ function Company({step, handleNext, disabled}) {
                     )}
                     rules={{ required: 'Company name required' }}
                     />
-
+                    
                     <Controller
                     name="description"
                     control={control}

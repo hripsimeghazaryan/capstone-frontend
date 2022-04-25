@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Checkbox,
   Grid,
@@ -10,7 +10,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Buttons from '../components/Buttons/Buttons';
 import Heading from '../components/Heading/Heading';
 import './LogInPage.css';
-import axios from 'axios';
+import requests from '../utils/requests';
+import { UserContext } from '../contexts/user-context'
+import { id } from 'date-fns/locale';
 
  
 function LogInPage() {
@@ -18,12 +20,7 @@ function LogInPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if(userType) {
-    //         return <Redirect to={"/home"} />
-    //     }
-    // })
+    const { userData, setUserData } = useContext()
 
     const handleEmailChange = (event) => setEmail(event.target.value);
     
@@ -32,9 +29,13 @@ function LogInPage() {
     const handleChange = (event) => setChecked(event.target.checked);
 
     const handleLogIn = async () => {
-        const response = await axios.post("auth/login", {email, password});
-        return response;
-        navigate("/home");
+        const response = await requests.sendRequest("login", {method: "POST", body: {email, password}})
+        if(response.status === "200") {
+            setUserData(response.data);
+            if(userData.user_type_id === "admin") navigate("/user-account");
+
+            navigate("/admin-account");
+        }
     }
 
     return(
@@ -85,7 +86,7 @@ function LogInPage() {
                     />
                 </Grid>
                 <Grid item xs={12} className="button">
-                <Link to="/home" style={{ textDecoration: 'none' }}>
+                <Link to="/user-page" style={{ textDecoration: 'none' }}>
                     <Buttons name={"Log In"} />
                 </Link>
                 </Grid>

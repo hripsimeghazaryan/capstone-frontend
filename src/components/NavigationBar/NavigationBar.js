@@ -5,14 +5,16 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './NavigationBar.css';
+import AvatarComp from '../Avatar/Avatar'
 
 function NavigationBar(props) {
-    const { isLogged } = props;
     const navigate = useNavigate();
 
     const logged = true;
 
     const handleAccount = () => {
+        //if useData => useData.user_type === "admin" => /admin-account
+        //else go to /user-account
         navigate("/user-account");
         //navigate("/admin-account")
     }
@@ -31,9 +33,7 @@ function NavigationBar(props) {
                 MushRoom
             </Typography>
             {logged && 
-                <div style={{marginTop: "4px", marginRight: "4px"}} className="account-avatar">
-                    <Avatar className="user-avatar" onClick={() => handleAccount()} src="">H</Avatar>
-                </div>
+                <AvatarComp />
             }            
         </AppBar>
     );

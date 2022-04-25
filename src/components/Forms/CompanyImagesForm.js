@@ -14,6 +14,10 @@ function CompanyImages({step, handleNext}) {
     const navigate = useNavigate();
     const { control, handleSubmit } = useForm();
     const onSubmit = async (data) => {
+        //const response = Requests.sendRequests("/user-account/register", {method: "POST", body: data});
+        // if(responde.code == "200") {
+        // handleNext(step);
+        // }
         alert(data);
         navigate("/admin-page");
 
@@ -41,11 +45,13 @@ function CompanyImages({step, handleNext}) {
                     )}
                     />
                 <Divider />
-                <div className="button">
-                    <Button type="submit" variant="contained" color="primary">
-                        Done
-                    </Button>
-                </div>
+                {/* {!disabled &&  */}
+                    <div className="button">
+                        <Button type="submit" variant="contained" color="primary">
+                            Done
+                        </Button>
+                    </div> 
+                {/*  } */}
             </form>
         </Paper>
     )

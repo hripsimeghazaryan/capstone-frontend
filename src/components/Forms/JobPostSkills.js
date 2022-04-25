@@ -57,7 +57,7 @@ function JobSkills({step, handleNext}) {
                     <Button type="submit" variant="contained" color="primary">
                         Done
                     </Button>
-                </div>
+                </div> 
             </form>
         </Paper>
     )

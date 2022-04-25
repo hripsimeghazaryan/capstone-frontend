@@ -5,19 +5,28 @@ import {
     Paper,
     Button,
     Divider,
-    TextField
+    TextField,
+    MenuItem
 } from '@mui/material';
 import Heading from "../Heading/Heading";
 import Buttons from '../Buttons/Buttons';
 import './Forms.css';
+import requests from "../../utils/requests";
 
 function Skills({step, handleNext, disabled}) {
     const [indexes, setIndexes] = React.useState([]);
     const [counter, setCounter] = React.useState(1);
 
+    const skills = ["Adaptability", "Attention to detail", "Communication", "Customer service",
+"Decision making", "Multitasking", "Problem solving", "Time management", "Data analysis", "Multilingualism",
+"Project management", "Research skills", "Software proficiency", "Writing and editing"];
+
     const { control, handleSubmit } = useForm();
     const onSubmit = async (data) => {
-        alert(data);
+        const response = await requests.sendRequest("seeker-skill-set", {method: "POST", body: data});
+        if(response.user_accoumt_id) {
+            handleNext(step);
+        }
         handleNext(step);
     };
 
@@ -35,12 +44,13 @@ function Skills({step, handleNext, disabled}) {
                         return (
                             <Controller
                             key={index}
-                            name={`${index}`}
+                            name={`skill${index}`}
                             control={control}
                             defaultValue=""
                             render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <TextField
                                 disabled={disabled}
+                                select
                                 className="form-component"
                                 label="Skill"
                                 variant="outlined"
@@ -48,7 +58,13 @@ function Skills({step, handleNext, disabled}) {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
-                                />
+                                >
+                                    {skills.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                                 )}
                             />
                         )

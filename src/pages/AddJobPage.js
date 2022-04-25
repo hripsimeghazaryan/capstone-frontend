@@ -6,6 +6,7 @@ import JobType from '../components/Forms/JobTypeForm';
 import JobPost from '../components/Forms/JobPostForm';
 import JobSkills from '../components/Forms/JobPostSkills';
 import JobLocation from '../components/Forms/JobLocationForm';
+import JobActivity from '../components/Forms/JobActivityForm';
 
 const steps = [
         "Job Type",
@@ -21,9 +22,11 @@ function getStepContent(step, handleNext) {
         case 1:
             return <JobPost step={step} handleNext={handleNext} />;
         case 2: 
-            return <JobSkills step={step} handleNext={handleNext} />
+            return <JobSkills step={step} handleNext={handleNext} />;
+        case 3: 
+            return <JobLocation step={step} handleNext={handleNext} />;
         default:
-            return <JobLocation />;
+            return <JobActivity />;
     }
 }
 

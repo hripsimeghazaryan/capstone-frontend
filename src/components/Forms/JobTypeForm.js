@@ -26,7 +26,7 @@ function JobType({step, handleNext, disabled}) {
             <Heading title={"Job Type"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                     <Controller
-                    name="jobType"
+                    name="job_type"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -47,13 +47,11 @@ function JobType({step, handleNext, disabled}) {
                     rules={{ required: 'Job type required' }}
                     />
                 <Divider />
-                {!disabled && 
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
-                    </div> 
-                }
+                <div className="button">
+                    <Button type="submit" variant="contained" color="primary">
+                        Done
+                    </Button>
+                </div> 
             </form>
         </Paper>
     )

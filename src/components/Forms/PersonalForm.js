@@ -20,14 +20,19 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from "../Heading/Heading";
 import moment from 'moment';
-// import axios from "axios";
+import requests from "../../utils/requests";
 
 function Personal({step, handleNext, disabled}) {
     const { handleSubmit, control } = useForm();
     const onSubmit = async (data) => {
-        //await axios.post("regiter/personal", data);
-        alert(JSON.stringify(data));
-        handleNext(step);
+        const testData = {
+            ...data,
+            contact_number: '094111111',
+        }
+        const response = await requests.sendRequest("user-account/register", {method: "POST", body: testData});
+        if(response.account_id) {
+            handleNext(step);
+        }
     }
     
     return (
@@ -36,7 +41,7 @@ function Personal({step, handleNext, disabled}) {
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
                     <Controller
-                    name="firstName"
+                    name="first_name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -56,7 +61,7 @@ function Personal({step, handleNext, disabled}) {
                     />
 
                     <Controller
-                    name="lastName"
+                    name="last_name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -111,11 +116,11 @@ function Personal({step, handleNext, disabled}) {
                         type="password"
                         />
                         )}
-                    rules={{ required: 'Email required' }}
+                    rules={{ required: 'Password required' }}
                     />
 
                     <Controller
-                    name="phone"
+                    name="contact_number"
                     control={control}
                     render={({ field: { onChange, value } }) => (
                         <MuiPhoneNumber
@@ -135,7 +140,7 @@ function Personal({step, handleNext, disabled}) {
                     
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Controller
-                        name="dateOfBirth"
+                        name="date_of_birth"
                         control={control}
                         defaultValue={null}
                         render={({
@@ -207,7 +212,7 @@ function Personal({step, handleNext, disabled}) {
                         <Controller
                         rules={{ required: "Status required" }}
                         control={control}
-                        name="status"
+                        name="is_active"
                         render={({ field }) => {
                             return (
                                 <RadioGroup 
@@ -215,13 +220,13 @@ function Personal({step, handleNext, disabled}) {
                                 {...field}>
                                     <FormControlLabel
                                     disabled={disabled}
-                                    value="yes"
+                                    value={true}
                                     control={<Radio />}
                                     label="Yes"
                                     />
                                     <FormControlLabel
                                     disabled={disabled}
-                                    value="no"
+                                    value={false}
                                     control={<Radio />}
                                     label="No"
                                     />
@@ -232,15 +237,15 @@ function Personal({step, handleNext, disabled}) {
                     </div>
                 </div>
                 <Divider />
-                <Controller
+                {/* <Controller
                 rules={{required: "Image required"}}
                 control={control}
-                name="image"
+                name="user_image"
                 render={({ field }) => (
                     <input
                     disabled={disabled}
                     onChange={e => {
-                        field.onChange(e.target.files);
+                        field.onChange(e.target.files[0]);
                     }}
                     // className="form-component"
                     id="upload-photo"
@@ -248,7 +253,7 @@ function Personal({step, handleNext, disabled}) {
                     type="file"
                     />
                 )}
-                />
+                /> */}
                 <Divider />
                 {!disabled &&
                     <div className="button">
