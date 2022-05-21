@@ -1,24 +1,15 @@
 import { 
     Typography,
     AppBar,
-    Avatar
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import './NavigationBar.css';
-import AvatarComp from '../Avatar/Avatar'
+import AvatarComp from '../Avatar/Avatar';
+import { UserContext } from '../../contexts/user-context';
+import { useContext } from 'react';
 
-function NavigationBar(props) {
-    const navigate = useNavigate();
-
-    const logged = true;
-
-    const handleAccount = () => {
-        //if useData => useData.user_type === "admin" => /admin-account
-        //else go to /user-account
-        navigate("/user-account");
-        //navigate("/admin-account")
-    }
-
+function NavigationBar() {
+    const { userData } = useContext(UserContext);
+    
     return(
         <AppBar 
         className="navbar"
@@ -29,10 +20,14 @@ function NavigationBar(props) {
             backgroundColor: "#aa00ff", 
             zIndex: 100
         }}>
-            <Typography variant="h4" component="div" style={{fontSize: 24, padding: "10px"}}>
+            <Typography 
+            variant="h4" 
+            component="div" 
+            style={{fontSize: 24, padding: "10px"}}
+            >
                 MushRoom
             </Typography>
-            {logged && 
+            {userData && 
                 <AvatarComp />
             }            
         </AppBar>

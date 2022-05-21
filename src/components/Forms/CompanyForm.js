@@ -1,28 +1,41 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
 import {
-    TextField,
-    Button,
     Paper,
     Divider
 } from "@mui/material";
 import './Forms.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from '../Heading/Heading';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
+import Buttons from '../Buttons/Buttons';
+import InputText from "../InputText/InputText";
+import InputDate from "../InputDate/InputDate";
+import InputMultiline from '../InputMultiline/InputMultiline';
+import { UserContext } from '../../contexts/user-context';
+import { useContext } from 'react';
+import requests from "../../utils/requests";
 
-function Company({step, handleNext, disabled}) {
+function Company({step, handleNext, disabled, handleEnable}) {
     const { handleSubmit, control } = useForm();
+    const { userData, setUserData } = useContext(UserContext);
+
     const onSubmit = async (data) => {
-        //const response = Requests.sendRequests("/user-account/register", {method: "POST", body: data});
-        // if(responde.code == "200") {
-        // handleNext(step);
-        // }
-        alert(data);
-        handleNext(step);
+        const bodyData = {
+            ...data,
+            user_id: userData.account_id
+        }
+
+        const response = await requests.sendRequest("company/company", {method: "POST", body: bodyData});
+        if(response.id) {
+            localStorage.setItem("company_id", response.id);
+            setUserData({
+                ...userData,
+                company_id: response.id,
+                company_name: response.company_name
+            });
+        }
+        (disabled !== undefined) ?  handleEnable() : handleNext(step);
     }
 
     return (
@@ -31,103 +44,80 @@ function Company({step, handleNext, disabled}) {
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
                     <Controller
-                    name="company-name"
+                    name="company_name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        disabled={disabled}
-                        label="Company Name"
-                        variant="outlined"
+                        <InputText 
+                        label={"Company Name"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled} 
                         />
                     )}
                     rules={{ required: 'Company name required' }}
                     />
                     
                     <Controller
-                    name="description"
+                    name="profile_description"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="Description"
-                        disabled={disabled}
-                        variant="outlined"
+                        <InputMultiline 
+                        label={"Description"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled} 
+                        rows={"3"}
                         />
                         )}
                     />
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Controller
-                        name="establishment-date"
+                        name="establishment_date"
                         control={control}
                         defaultValue={null}
                         render={({
                             field: { onChange, value },
                             fieldState: { error, invalid }
                         }) => (
-                            <DatePicker
-                            label="Establishment Date"
-                            disableFuture
-                            disabled={disabled}
+                            <InputDate 
+                            label={"Establishment Date"}
                             value={value}
-                            className="form-component"
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                className="form-component"
-                                    error={invalid}
-                                    helperText={invalid ? error.message : null}
-                                    id="establishment-date"
-                                    variant="outlined"
-                                    margin="dense"
-                                    fullWidth
-                                    color="primary"
-                                    {...params}
-                                />
-                            )}
+                            onChange={onChange}
+                            invalid={invalid}
+                            error={error}
+                            disabled={disabled}
                             />
                         )}
                         />
                     </LocalizationProvider>
 
                     <Controller
-                    name="url"
+                    name="company_website_url"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="Company URL"
-                        disabled={disabled}
-                        variant="outlined"
+                        <InputText 
+                        label={"Company URL"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled} 
                         />
                         )}
                     />
                 </div>
+
                 <Divider />
                 {!disabled &&
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
-                    </div> 
+                    <Buttons type={"submit"} name={"Done"} />
                 }
             </form>
         </Paper>

@@ -3,30 +3,48 @@ import  { useNavigate } from 'react-router-dom';
 import * as React from "react";
 import {
     Paper,
-    TextField,
-    Button,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
     Divider,
-    FormLabel
 } from "@mui/material";
 import Heading from "../Heading/Heading";
+import Buttons from '../Buttons/Buttons';
+import InputText from "../InputText/InputText";
+import InputDate from "../InputDate/InputDate";
+import InputMultiline from '../InputMultiline/InputMultiline';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import moment from 'moment';
 import './Forms.css';
+import { UserFormContext } from '../../contexts/user-form-data';
+import { UserContext } from '../../contexts/user-context';
+import { useContext } from 'react';
 import requests from "../../utils/requests";
 
-function Experience({disabled}) {
+
+function Experience({disabled, handleEnable}) {
     const navigate = useNavigate();
+    const { userFormData, setUserFormData } = useContext(UserFormContext);
+    const { userData } = useContext(UserContext);
     const { handleSubmit, control } = useForm();
-    const onSubmit = async (data) => {
-        const response = await requests.sendRequest("experience-detail/experience", {method: "POST", body: data});
-        if(response.user_accoumt_id) {
-            navigate("/user-page");
+
+    const handleRegister = async (data) => {
+        const body = {
+            ...userFormData,
+            experience: {
+                url: "experience-detail/experience",
+                data: {
+                    ...data,
+                    user_id: userData.account_id
+                }
+            }
         }
+        for(const key in body) {
+            const response = await requests.sendRequest(body[key].url, {method: "POST", body: body[key].data});
+        }
+        navigate("/seeker-page");
+        setUserFormData(null);
+    }
+
+    const onSubmit = async (data) => {
+        (disabled !== undefined) ?  handleEnable() : handleRegister(data);
     }
 
     return (
@@ -34,64 +52,39 @@ function Experience({disabled}) {
             <Heading title={"Experience"} divider={true} />
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-inputs">
-                    <FormLabel>Working Status</FormLabel>
                     <Controller
-                    rules={{ required: true }}
                     control={control}
                     name="is_current_job"
-                    render={({ field }) => {
-                        return (
-                            <RadioGroup 
-                            className="form-component radio-group"
-                            {...field}>
-                                <FormControlLabel
-                                disabled={disabled}
-                                value="working"
-                                control={<Radio />}
-                                label="Working"
-                                />
-                                <FormControlLabel
-                                disabled={disabled}
-                                value="unemployed"
-                                control={<Radio />}
-                                label="Unemployed"
-                                />
-                            </RadioGroup>
-                            );
-                        }}
+                    rules={{required: true}}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <InputText 
+                        label={"Working Status"}
+                        value={value}
+                        onChange={onChange}
+                        error={!!error}
+                        type={"text"}
+                        disabled={disabled} 
+                        />
+                        )}
                     />
-
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Controller
                         name="start_date"
                         control={control}
                         defaultValue={null}
+                        rules={{required: true}}
                         render={({
                             field: { onChange, value },
                             fieldState: { error, invalid }
                         }) => (
-                            <DatePicker
-                            className="form-component"
-                            disabled={disabled}
-                            label="Starting Date"
-                            disableFuture
+                            <InputDate 
+                            label={"Starting Date"}
                             value={value}
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                className="form-component"
-                                error={invalid}
-                                helperText={invalid ? error.message : null}
-                                id="starting-date"
-                                variant="outlined"
-                                margin="dense"
-                                fullWidth
-                                color="primary"
-                                {...params}
-                                />
-                                )}
+                            onChange={onChange}
+                            invalid={invalid}
+                            error={error}
+                            disabled={disabled}
                             />
                         )}
                         />
@@ -99,32 +92,18 @@ function Experience({disabled}) {
                         name="end_date"
                         control={control}
                         defaultValue={null}
+                        rules={{required: true}}
                         render={({
                             field: { onChange, value },
                             fieldState: { error, invalid }
                         }) => (
-                            <DatePicker
-                            label="Ending Date"
-                            disabled={disabled}
-                            disableFuture
+                            <InputDate 
+                            label={"Ending Date"}
                             value={value}
-                            className="form-component"
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                className="form-component"
-                                error={invalid}
-                                helperText={invalid ? error.message : null}
-                                id="ending-date"
-                                variant="outlined"
-                                margin="dense"
-                                fullWidth
-                                color="primary"
-                                {...params}
-                                />
-                            )}
+                            onChange={onChange}
+                            invalid={invalid}
+                            error={error}
+                            disabled={disabled}
                             />
                         )}
                         />
@@ -135,36 +114,32 @@ function Experience({disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        disabled={disabled}
-                        label="Job Title"
-                        variant="outlined"
+                        <InputText 
+                        label={"Job Title"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
-                        type="text"
+                        type={"text"}
+                        disabled={disabled} 
                         />
                         )}
+                    rules={{required: true}}
                     />
                     <Controller
                     name="company_name"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="Company Name"
-                        disabled={disabled}
-                        variant="outlined"
+                        <InputText 
+                        label={"Company Name"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
-                        type="text"
+                        type={"text"}
+                        disabled={disabled} 
                         />
                         )}
+                    rules={{required: true}}
                     />
 
                     <Controller
@@ -172,27 +147,24 @@ function Experience({disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="Job Description"
-                        disabled={disabled}
-                        variant="outlined"
+                        <InputMultiline 
+                        label={"Job Description"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
-                        type="text"
+                        type={"text"}
+                        disabled={disabled} 
+                        rows={"3"}
                         />
                         )}
+                    rules={{required: true}}
                     />
                 </div>
                 <Divider />
-                {!disabled &&
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
-                    </div>
+                {!disabled ?
+                    <Buttons name={"Done"} type={"submit"} />
+                    :
+                    <Buttons name={"Edit"} type={"button"} handleClick={handleEnable} />
                 }
             </form>
         </Paper>

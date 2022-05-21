@@ -1,0 +1,10 @@
+[
+    {
+        "value": "working",
+        "label": "Working"
+    },
+    {
+        "value": "unemployed",
+        "label": "Unemployed"
+    }
+]

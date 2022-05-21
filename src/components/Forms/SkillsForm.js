@@ -3,7 +3,6 @@ import { useForm, Controller } from "react-hook-form";
 import AddIcon from '@mui/icons-material/Add';
 import { 
     Paper,
-    Button,
     Divider,
     TextField,
     MenuItem
@@ -11,23 +10,30 @@ import {
 import Heading from "../Heading/Heading";
 import Buttons from '../Buttons/Buttons';
 import './Forms.css';
-import requests from "../../utils/requests";
+import skills from "../../constants/skills.json";
+import { UserFormContext } from '../../contexts/user-form-data';
+import { UserContext } from '../../contexts/user-context';
+import { useContext } from 'react';
 
-function Skills({step, handleNext, disabled}) {
+function Skills({step, handleNext, disabled, handleEnable}) {
     const [indexes, setIndexes] = React.useState([]);
     const [counter, setCounter] = React.useState(1);
-
-    const skills = ["Adaptability", "Attention to detail", "Communication", "Customer service",
-"Decision making", "Multitasking", "Problem solving", "Time management", "Data analysis", "Multilingualism",
-"Project management", "Research skills", "Software proficiency", "Writing and editing"];
-
+    const { userFormData, setUserFormData } = useContext(UserFormContext);
+    const { userData } = useContext(UserContext);
     const { control, handleSubmit } = useForm();
+
     const onSubmit = async (data) => {
-        const response = await requests.sendRequest("seeker-skill-set", {method: "POST", body: data});
-        if(response.user_accoumt_id) {
-            handleNext(step);
-        }
-        handleNext(step);
+        setUserFormData({
+            ...userFormData,
+            skill_set: {
+                url: "seeker-skill-set",
+                data: {
+                    skills: data,
+                    user_id: userData.account_id
+                }
+            }
+        });
+        (disabled !== undefined) ?  handleEnable() : handleNext(step)
     };
 
     const addSkill = () => {
@@ -43,7 +49,7 @@ function Skills({step, handleNext, disabled}) {
                     {indexes.map(index => {
                         return (
                             <Controller
-                            key={index}
+                            key={`skill${index}`}
                             name={`skill${index}`}
                             control={control}
                             defaultValue=""
@@ -70,12 +76,10 @@ function Skills({step, handleNext, disabled}) {
                         )
                     })}
                 <Divider />
-                {!disabled && 
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
-                    </div> 
+                {!disabled ?
+                    <Buttons name={"Done"} type={"submit"} />
+                    :
+                    <Buttons name={"Edit"} type={"button"} handleClick={handleEnable} />
                 }
             </form>
         </Paper>

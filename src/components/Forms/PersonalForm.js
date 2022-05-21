@@ -1,38 +1,49 @@
 import { useForm, Controller } from "react-hook-form";
 import * as React from "react";
 import {
-    TextField,
-    Button,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
     Divider,
     FormLabel,
-    Paper, 
-    Input
+    Paper
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number";
-import AddIcon from '@mui/icons-material/Add';
 import './Forms.css';
-import Buttons from "../Buttons/Buttons";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from "../Heading/Heading";
-import moment from 'moment';
+import Buttons from "../Buttons/Buttons";
+import InputText from "../InputText/InputText";
+import InputRadioGroup from "../InputRadioGroup/InputRadioGroup";
+import InputDate from "../InputDate/InputDate";
+import { UserContext } from '../../contexts/user-context';
+import { useContext } from 'react';
 import requests from "../../utils/requests";
+import is_active from "../../constants/is_active.json";
+import gender from "../../constants/gender.json";
 
-function Personal({step, handleNext, disabled}) {
+function Personal({step, handleNext, handleEnable, disabled}) {
     const { handleSubmit, control } = useForm();
+    const { userData, setUserData } = useContext(UserContext);
+
+    const phoneNumberHandler = (number) => `0${number.slice(3)}`;
+
     const onSubmit = async (data) => {
-        const testData = {
+        const bodyData = {
             ...data,
-            contact_number: '094111111',
+            user_type: userData.user_type,
+            contact_number: phoneNumberHandler(data.contact_number)
         }
-        const response = await requests.sendRequest("user-account/register", {method: "POST", body: testData});
+
+        const response = await requests.sendRequest("user-account/register", {method: "POST", body: bodyData});
+
         if(response.account_id) {
-            handleNext(step);
+            localStorage.setItem("user_id", response.account_id);
+            setUserData({
+                ...userData,
+                personal_info: bodyData,
+                account_id: response.account_id
+            });
         }
+        (disabled !== undefined) ?  handleEnable() : handleNext(step)
     }
     
     return (
@@ -45,18 +56,15 @@ function Personal({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        disabled={disabled}
-                        className="form-component"
-                        label="First Name"
-                        variant="outlined"
+                        <InputText 
+                        label={"First Name"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
-                        
+                        type={"text"}
+                        disabled={disabled} 
                         />
-                        )}
+                    )}
                     rules={{ required: 'First name required' }}
                     />
 
@@ -65,15 +73,13 @@ function Personal({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        disabled={disabled}
-                        className="form-component"
-                        label="Last Name"
-                        variant="outlined"
+                        <InputText 
+                        label={"Last Name"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled}
                         />
                         )}
                     rules={{ required: 'Last name required' }}
@@ -84,16 +90,13 @@ function Personal({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        disabled={disabled}
-                        className="form-component"
-                        label="Email"
-                        variant="outlined"
+                        <InputText 
+                        label={"Email"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
-                        type="email"
+                        type={"email"}
+                        disabled={disabled}
                         />
                         )}
                     rules={{ required: 'Email required' }}
@@ -104,16 +107,13 @@ function Personal({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        disabled={disabled}
-                        className="form-component"
-                        label="Password"
-                        variant="outlined"
+                        <InputText 
+                        label={"Password"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
-                        type="password"
+                        type={"password"}
+                        disabled={disabled}
                         />
                         )}
                     rules={{ required: 'Password required' }}
@@ -132,7 +132,7 @@ function Personal({step, handleNext, disabled}) {
                         value={value}
                         defaultCountry="am"
                         data-cy="user-phone"
-                        onChange={onChange}
+                        onChange={(value) => onChange(+value+"")}
                         />
                     )}
                     rules={{ required: 'Phone number required' }}
@@ -147,31 +147,13 @@ function Personal({step, handleNext, disabled}) {
                             field: { onChange, value },
                             fieldState: { error, invalid }
                         }) => (
-                            <DatePicker
-                            disabled={disabled}
-                            className="form-component"
-                            label="Date of birth"
-                            disableFuture
+                            <InputDate 
+                            label={"Date of birth"}
                             value={value}
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                    disabled={disabled}
-                                    error={invalid}
-                                    className="form-component"
-                                    helperText={invalid ? error.message : null}
-                                    id="dateOfBirth"
-                                    variant="outlined"
-                                    margin="dense"
-                                    fullWidth
-                                    color="primary"
-                                    autoComplete="bday"
-                                    {...params}
-                                />
-                                )
-                            }
+                            onChange={onChange}
+                            invalid={invalid}
+                            error={error}
+                            disabled={disabled}
                             />
                         )}
                         rules={{ required: "Birth date required" }}
@@ -185,23 +167,7 @@ function Personal({step, handleNext, disabled}) {
                         name="gender"
                         render={({ field }) => {
                             return (
-                                <RadioGroup 
-                                disabled={disabled}
-                                className="form-component radio-group"
-                                {...field}>
-                                    <FormControlLabel
-                                    disabled={disabled}
-                                    value="male"
-                                    control={<Radio />}
-                                    label="Male"
-                                    />
-                                    <FormControlLabel
-                                    disabled={disabled}
-                                    value="female"
-                                    control={<Radio />}
-                                    label="Female"
-                                    />
-                                </RadioGroup>
+                                <InputRadioGroup field={field} radio={gender} disabled={disabled} />
                                 );
                             }}
                         rules={{ required: "Gender required" }}
@@ -215,22 +181,7 @@ function Personal({step, handleNext, disabled}) {
                         name="is_active"
                         render={({ field }) => {
                             return (
-                                <RadioGroup 
-                                className="form-component radio-group"
-                                {...field}>
-                                    <FormControlLabel
-                                    disabled={disabled}
-                                    value={true}
-                                    control={<Radio />}
-                                    label="Yes"
-                                    />
-                                    <FormControlLabel
-                                    disabled={disabled}
-                                    value={false}
-                                    control={<Radio />}
-                                    label="No"
-                                    />
-                                </RadioGroup>
+                                <InputRadioGroup field={field} radio={is_active} disabled={disabled} />
                                 );
                             }}
                         />
@@ -242,25 +193,24 @@ function Personal({step, handleNext, disabled}) {
                 control={control}
                 name="user_image"
                 render={({ field }) => (
-                    <input
-                    disabled={disabled}
-                    onChange={e => {
-                        field.onChange(e.target.files[0]);
-                    }}
-                    // className="form-component"
-                    id="upload-photo"
-                    name="upload-photo"
-                    type="file"
-                    />
-                )}
-                /> */}
-                <Divider />
-                {!disabled &&
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
+                    <div>
+                        <input
+                        disabled={disabled}
+                        onChange={e => {
+                            field.onChange(e.target.files[0]);
+                        }}
+                        id="upload-photo"
+                        name="upload-photo"
+                        type="file"
+                        />
                     </div>
+                )}
+                />
+                <Divider /> */}
+                {!disabled ?
+                    <Buttons name={"Done"} type={"submit"} />
+                    :
+                    <Buttons name={"Edit"} type={"button"} handleClick={handleEnable} />
                 }
             </form>
         </Paper>

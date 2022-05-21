@@ -1,11 +1,9 @@
-import { createContext, useEffect, useState } from 'react';
-import axios from "axios";
+import { createContext, useState } from 'react';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    //kanchel setUserData-n login i mej
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState(null);
     
     return (
         <UserContext.Provider value={{userData, setUserData}}>
@@ -13,9 +11,3 @@ export const UserProvider = ({ children }) => {
         </UserContext.Provider> 
     )
 }
-
-// disabled ete user.data is empty
-// const data = useContext(UserConttext)
-// <input value={data.firstName}
-
-// if user type is admin run admin part else run user part

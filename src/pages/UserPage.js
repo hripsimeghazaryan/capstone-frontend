@@ -1,23 +1,24 @@
-import { Box } from '@mui/material';
+import { useState, useEffect } from 'react';
 import { React } from 'react';
-// import axios from 'axios'; //useEffect, useState
 import CardComponent from '../components/Card/Card';
+import requests from "../utils/requests";
+import { UserContext } from '../contexts/user-context';
+import { useContext } from 'react';
 
 function HomePage() {
     const iterations = [0, 1, 2, 3, 4, 5];
-    // const [data, setData] = useState([]);
+    const { userData } = useContext(UserContext);
+    const [data, setData] = useState([]);
 
-    // useEffect(() => {
-        // check if 
-    //     const fetchData = async () => {
-    //         const data = await axios.get('http://localhost:3000/jobs');
-    //         setData(data)
-    //     }
-    //     fetchData()
-    // }, []);
-
-    // instead of iterations it should be data
-
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await requests.sendRequest(`job-post/matchingJobs/${userData.account_id}`, {method: "GET"})
+            setData(data)
+        }
+        fetchData();
+    }, []);
+    console.log(data)
+    
     return (
         <div className="card-list-component">
             {iterations.map((index) => {

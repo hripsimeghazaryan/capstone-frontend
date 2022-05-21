@@ -36,7 +36,7 @@ function MainPage () {
                         }}>
                             Here we can give you an opportunity to find
                             <br/>
-                            a job to corresponding to your needs. 
+                            a job corresponding to your skills. 
                         </Typography>
                     </div> 
                     <Box 

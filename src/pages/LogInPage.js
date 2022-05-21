@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useForm, Controller } from "react-hook-form";
 import {
   Checkbox,
   Grid,
@@ -6,39 +7,39 @@ import {
   FormControlLabel,
   Paper
 } from '@mui/material';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Buttons from '../components/Buttons/Buttons';
 import Heading from '../components/Heading/Heading';
 import './LogInPage.css';
 import requests from '../utils/requests';
-import { UserContext } from '../contexts/user-context'
-import { id } from 'date-fns/locale';
+import { UserContext } from '../contexts/user-context';
 
- 
 function LogInPage() {
     const [checked, setChecked] = useState(true);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState(false);
+    const { handleSubmit, control } = useForm();
     const navigate = useNavigate();
-    const { userData, setUserData } = useContext()
-
-    const handleEmailChange = (event) => setEmail(event.target.value);
-    
-    const handlePassChange = (event) => setPassword(event.target.value);
+    const { setUserData } = useContext(UserContext);
 
     const handleChange = (event) => setChecked(event.target.checked);
 
-    const handleLogIn = async () => {
-        const response = await requests.sendRequest("login", {method: "POST", body: {email, password}})
-        if(response.status === "200") {
-            setUserData(response.data);
-            if(userData.user_type_id === "admin") navigate("/user-account");
-
-            navigate("/admin-account");
-        }
+    const onSubmit = async (data) => {
+        const response = await requests.sendRequest("user-account/login", {method: "POST", body: data});
+        if(response.account_id) {
+            setLoginError(false)
+            localStorage.setItem("user_id", response.account_id);
+            setUserData(response);
+            if(response.user_type === 1) {
+                navigate("/admin-page")
+            }
+            if(response.user_type === 2) {
+                navigate("/seeker-page")
+            }
+        } 
+        setLoginError(true);
     }
 
-    return(
+    return (
         <Paper 
         className="login-form"
         sx={{ 
@@ -53,24 +54,50 @@ function LogInPage() {
             direction={'column'}
             justify={'center'}
             alignItems={'center'}
+            marginTop={'10px'}
             >
+                <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <Grid item xs={12}>
-                    <TextField 
-                    type="email"
-                    label="Email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    required
-                    ></TextField>
+                    <Controller
+                    name="email"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                        sx={{marginBottom: "16px"}}
+                        label="Email"
+                        variant="outlined"
+                        value={value}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        type="email"
+                        error={loginError}
+                        />
+                        )}
+                    rules={{ required: 'Email required' }}
+                    />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField 
-                    label="Password" 
-                    type={'password'}
-                    value={password}
-                    onChange={handlePassChange}
-                    required
-                    ></TextField>
+                <Controller
+                    name="password"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                        sx={{marginBottom: "16px"}}
+                        label="Password"
+                        variant="outlined"
+                        value={value}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        type="password"
+                        error={loginError}
+                        />
+                        )}
+                    rules={{ required: 'Password required' }}
+                    />
                 </Grid>
                 <Grid item xs={12}>
                     <FormControlLabel
@@ -86,10 +113,9 @@ function LogInPage() {
                     />
                 </Grid>
                 <Grid item xs={12} className="button">
-                <Link to="/user-page" style={{ textDecoration: 'none' }}>
-                    <Buttons name={"Log In"} />
-                </Link>
+                    <Buttons name={"Log In"} type={"submit"} />
                 </Grid>
+                </form>
             </Grid>
         </Paper>
     )

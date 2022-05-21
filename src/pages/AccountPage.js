@@ -8,9 +8,6 @@ import Skills from "../components/Forms/SkillsForm";
 import Experience from "../components/Forms/ExperienceForm";
 import './AccountPage.css';
 
-
-// import axios from "axios";
-
 function AccountPage(props) {
     const [edible, setEdible] = useState(false);
 
@@ -47,14 +44,6 @@ function AccountPage(props) {
         setExperience(true);
     }
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const data = await axios.get();
-    //         setData(data)
-    //     }
-    //     fetchData()
-    // }, []);
-
     return (
         <Box className="account-container">
             <Box className="account-image-container"></Box>
@@ -65,17 +54,10 @@ function AccountPage(props) {
                     <Buttons name={"Experience"} handleClick={handleExperience} />
             </div>
             <Box sx={{width: "50%"}} className="account-info-container">
-                {personal && <Personal disabled={!edible}/>}
-                {education && <Education disabled={!edible}/>}
-                {skills && <Skills disabled={!edible}/>}
-                {experience && <Experience disabled={!edible}/>}
-            </Box>
-            <Box className="edit-save-button">
-                {!edible ?
-                <Buttons name={"Edit"} handleClick={() => setEdible(true)} />
-                :
-                <Buttons name={"Save"} handleClick={() => setEdible(false)} />
-                }
+                {personal && <Personal disabled={!edible} handleEnable={() => setEdible(!edible)} />}
+                {education && <Education disabled={!edible} handleEnable={() => setEdible(!edible)} />}
+                {skills && <Skills disabled={!edible} handleEnable={() => setEdible(!edible)} />}
+                {experience && <Experience disabled={!edible} handleEnable={() => setEdible(!edible)} />}
             </Box>
         </Box>
     )

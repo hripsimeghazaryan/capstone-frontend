@@ -1,24 +1,26 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Buttons from '../components/Buttons/Buttons';
-// import axios from 'axios'; //useEffect, useState
 import CardComponent from '../components/Card/Card';
+import requests from "../utils/requests";
+import { UserContext } from '../contexts/user-context';
+import { useContext } from 'react';
 
 function AdminPage() {
     const iterations = [0, 1, 2, 3, 4, 5];
     const navigate = useNavigate();
+    const [data, setData] = useState([]);
 
     const handleJobCreate = () => navigate("/add-job");
-    // const [data, setData] = useState([]);
 
     // useEffect(() => {
-        // check if 
     //     const fetchData = async () => {
-    //         const data = await axios.get('http://localhost:3000/jobs');
+    //         const data = await requests.sendRequest(`job-post/companyJobs/${userData.account_id}`, {method: "GET"})
     //         setData(data)
     //     }
-    //     fetchData()
+    //     fetchData();
     // }, []);
+    // console.log(data)
 
     // instead of iterations it should be data
 

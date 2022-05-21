@@ -32,12 +32,6 @@ function RegisterPage() {
 
     const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
-    // useEffect(() => {
-    //     if(userType) {
-    //         return <Redirect to={"/home"} />
-    //     }
-    // })
-
     return (
         <Box sx={{width: "50%"}}>
             <Heading title={"Registration forms"} divider={true}/>
@@ -49,7 +43,6 @@ function RegisterPage() {
             {getStepContent(activeStep, handleNext)}
         </Box>
     )
-
 }
 
 export default RegisterPage;

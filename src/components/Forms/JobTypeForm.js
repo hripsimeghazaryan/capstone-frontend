@@ -3,7 +3,6 @@ import { useForm, Controller } from "react-hook-form";
 import AddIcon from '@mui/icons-material/Add';
 import { 
     Paper,
-    Button,
     Divider,
     TextField, 
     MenuItem
@@ -11,14 +10,27 @@ import {
 import Heading from "../Heading/Heading";
 import Buttons from '../Buttons/Buttons';
 import './Forms.css';
+import { UserFormContext } from '../../contexts/user-form-data';
+import { useContext } from 'react';
 
 const types = ["Full-Time", "Part-Time", "Internship"];
 
-function JobType({step, handleNext, disabled}) {
+function JobType({step, handleNext}) {
     const { control, handleSubmit } = useForm();
+    const { userFormData, setUserFormData } = useContext(UserFormContext);
+
     const onSubmit = async (data) => {
-        alert(data);
-        handleNext(step);
+      setUserFormData({
+        ...userFormData,
+        job_type: {
+          url: "job-type",
+          data: {
+            ...data, 
+            job_id: localStorage.getItem("job_id")
+          }
+        }
+      })
+      handleNext(step);
     };
 
     return (
@@ -47,11 +59,7 @@ function JobType({step, handleNext, disabled}) {
                     rules={{ required: 'Job type required' }}
                     />
                 <Divider />
-                <div className="button">
-                    <Button type="submit" variant="contained" color="primary">
-                        Done
-                    </Button>
-                </div> 
+                <Buttons type={"submit"} name={"Done"} />
             </form>
         </Paper>
     )

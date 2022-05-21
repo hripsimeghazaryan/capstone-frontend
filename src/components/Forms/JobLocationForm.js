@@ -1,23 +1,40 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 import {
-    TextField,
-    Button,
     Paper,
     Divider
 } from "@mui/material";
 import './Forms.css';
-
+import Buttons from '../Buttons/Buttons';
 import Heading from '../Heading/Heading';
+import InputText from "../InputText/InputText";
+import requests from "../../utils/requests";
+import { UserFormContext } from '../../contexts/user-form-data';
+import { useContext } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-
-function JobLocation({step, handleNext}) {
+function JobLocation() {
     const navigate = useNavigate();
     const { handleSubmit, control } = useForm();
+    const { userFormData, setUserFormData } = useContext(UserFormContext);
+
     const onSubmit = async (data) => {
-        alert(data);
-        handleNext(step);
+        const body = {
+            ...userFormData,
+            location: {
+                url: "job-location",
+                data: {
+                    ...data,
+                    job_id: localStorage.getItem("job_id")
+                }
+            }
+        }
+        console.log(body)
+        for(const key in body) {
+            const response = await requests.sendRequest(body[key].url, {method: "POST", body: body[key].data});
+        }
+        navigate("/admin-page");
+        setUserFormData(null);
     }
 
     return (
@@ -30,14 +47,12 @@ function JobLocation({step, handleNext}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="Street Address"
-                        variant="outlined"
+                        <InputText 
+                        label={"Street Address"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
                         />
                         )}
                     rules={{ required: 'Street address required' }}
@@ -48,14 +63,12 @@ function JobLocation({step, handleNext}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="City"
-                        variant="outlined"
+                        <InputText 
+                        label={"City"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
                         />
                         )}
                     />
@@ -65,24 +78,18 @@ function JobLocation({step, handleNext}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        label="Country"
-                        variant="outlined"
+                        <InputText 
+                        label={"Country"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
                         />
                         )}
                     />
                 </div>
                 <Divider />
-                <div className="button">
-                    <Button type="submit" variant="contained" color="primary">
-                        Done
-                    </Button>
-                </div> 
+                <Buttons type={"submit"} name={"Done"} />
             </form>
         </Paper>
     )

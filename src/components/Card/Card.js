@@ -11,7 +11,7 @@ import './Card.css';
 
 import CardModal from '../Modal/Modal';
 
-function CardComponent({key}) {
+function CardComponent({key, data}) {
     const [open, setOpen] = useState(false);
     const handleModal = () => setOpen(!open);
 
@@ -25,7 +25,7 @@ function CardComponent({key}) {
         className="card-component"
         sx={{ 
         maxWidth: 345,
-        background: "rgb(171, 71, 188, 0.1)",
+        background: "#fafafa",
         ':hover': {
             boxShadow: 20
           } }}

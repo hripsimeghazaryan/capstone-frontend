@@ -1,26 +1,37 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
 import {
-    TextField,
-    Button,
     Paper,
     Divider
 } from "@mui/material";
 import './Forms.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from '../Heading/Heading';
-import moment from 'moment';
-import requests from "../../utils/requests";
+import Buttons from '../Buttons/Buttons';
+import InputText from "../InputText/InputText";
+import InputDate from "../InputDate/InputDate";
+import { UserFormContext } from '../../contexts/user-form-data';
+import { UserContext } from '../../contexts/user-context';
+import { useContext } from 'react';
 
-function Education({step, handleNext, disabled}) {
+function Education({step, handleNext, disabled, handleEnable}) {
     const { handleSubmit, control } = useForm();
+    const { userFormData, setUserFormData } = useContext(UserFormContext);
+    const { userData } = useContext(UserContext);
+
     const onSubmit = async (data) => {
-        const response = await requests.sendRequest("education-detail/education", {method: "POST", body: data});
-        if(response.user_accoumt_id) {
-            handleNext(step);
-        }
+        setUserFormData({
+            ...userFormData,
+            education: {
+                url: "education-detail/education",
+                data: {
+                    ...data,
+                    user_id: userData.account_id
+                }
+            }
+        });
+        (disabled !== undefined) ?  handleEnable() : handleNext(step)
     }
 
     return (
@@ -33,15 +44,13 @@ function Education({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        disabled={disabled}
-                        label="Degree"
-                        variant="outlined"
+                        <InputText 
+                        label={"Degree"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled} 
                         />
                         )}
                     rules={{ required: 'Education required' }}
@@ -52,15 +61,13 @@ function Education({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        disabled={disabled}
-                        label="Major"
-                        variant="outlined"
+                        <InputText 
+                        label={"Major"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled} 
                         />
                         )}
                     />
@@ -70,15 +77,13 @@ function Education({step, handleNext, disabled}) {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                        className="form-component"
-                        disabled={disabled}
-                        label="University"
-                        variant="outlined"
+                        <InputText 
+                        label={"University"}
                         value={value}
                         onChange={onChange}
                         error={!!error}
-                        helperText={error ? error.message : null}
+                        type={"text"}
+                        disabled={disabled} 
                         />
                         )}
                     />
@@ -92,28 +97,13 @@ function Education({step, handleNext, disabled}) {
                             field: { onChange, value },
                             fieldState: { error, invalid }
                         }) => (
-                            <DatePicker
-                            label="Starting Date"
-                            disabled={disabled}
-                            disableFuture
+                            <InputDate 
+                            label={"Starting Date"}
                             value={value}
-                            className="form-component"
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                className="form-component"
-                                error={invalid}
-                                helperText={invalid ? error.message : null}
-                                id="starting-date"
-                                variant="outlined"
-                                margin="dense"
-                                fullWidth
-                                color="primary"
-                                {...params}
-                                />
-                            )}
+                            onChange={onChange}
+                            invalid={invalid}
+                            error={error}
+                            disabled={disabled}
                             />
                         )}
                         />
@@ -125,40 +115,23 @@ function Education({step, handleNext, disabled}) {
                             field: { onChange, value },
                             fieldState: { error, invalid }
                         }) => (
-                            <DatePicker
-                            label="Ending Date"
-                            disabled={disabled}
-                            disableFuture
-                            className="form-component"
+                            <InputDate 
+                            label={"Ending Date"}
                             value={value}
-                            onChange={(value) =>
-                                onChange(moment(value).format("YYYY-MM-DD"))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                className="form-component"
-                                error={invalid}
-                                helperText={invalid ? error.message : null}
-                                id="ending-date"
-                                variant="outlined"
-                                margin="dense"
-                                fullWidth
-                                color="primary"
-                                {...params}
-                                />
-                                )}
+                            onChange={onChange}
+                            invalid={invalid}
+                            error={error}
+                            disabled={disabled}
                             />
                             )}
                         />
                     </LocalizationProvider>
                 </div>
                 <Divider />
-                {!disabled && 
-                    <div className="button">
-                        <Button type="submit" variant="contained" color="primary">
-                            Done
-                        </Button>
-                    </div> 
+                {!disabled ?
+                    <Buttons name={"Done"} type={"submit"} />
+                    :
+                    <Buttons name={"Edit"} type={"button"} handleClick={handleEnable} />
                 }
             </form>
         </Paper>

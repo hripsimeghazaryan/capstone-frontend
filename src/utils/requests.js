@@ -3,16 +3,24 @@ class Requests {
         this.url = "http://localhost:3000";
     }   
 
-    sendRequest = async (route, {body, ...requestParams}) => {
+    sendRequest = async (route, {method, body}) => {
         const params = {
-            ...requestParams,
+            method,
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body),
+            ...(method !== "GET" ? {body: JSON.stringify(body)} : {}),
         }
-        console.log(params)
         const response = await fetch(`${this.url}/${route}`, params);
+        const data = await response.json();
+        return data;
+    }
+
+    uploadImage = async (route, method, body) => {
+        const response = await fetch(`${this.url}/${route}`, {
+            method: method,
+            ...(method !== "GET" ? {body: body} : {}),
+        });
         const data = await response.json();
         return data;
     }

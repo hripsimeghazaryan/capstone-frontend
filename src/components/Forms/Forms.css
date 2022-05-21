@@ -25,7 +25,11 @@
     margin: 10px;
     width: 40%;
 }
-  
+ 
+.form .form-component.description {
+    width: 84%;
+}
+
 .form .form-component.radio-group {
     display: flex;
     flex-direction: row;
@@ -37,6 +41,6 @@
     padding: 20px 16px;
 }
 
-[type="file"] {
-    color: #878787;
+#upload-photo {
+    overflow: hidden;
 }

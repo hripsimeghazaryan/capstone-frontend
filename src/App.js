@@ -11,9 +11,10 @@ import HomePage from './pages/UserPage';
 import AccountPage from './pages/AccountPage';
 import AdminAccountPage from './pages/AdminAccountPage';
 import AddJob from './pages/AddJobPage';
+import { UserFormProvider } from "../src/contexts/user-form-data";
 
 const routes = [
-  {
+  { 
     path: "/",
     component: <MainPage />
   },
@@ -22,7 +23,7 @@ const routes = [
     component: <UserTypePage />
   },
   {
-    path: "/user-register",
+    path: "/seeker-register",
     component: <RegisterPage />
   },
   {
@@ -34,15 +35,15 @@ const routes = [
     component: <LogInPage />
   },
   {
-    path: "/user-page",
+    path: "/seeker-page",
     component: <HomePage />
   },
   {
-    path: "/admin-register",
+    path: "/admin-page",
     component: <AdminPage />
   },
   {
-    path: "/user-account",
+    path: "/seeker-account",
     component: <AccountPage />
   },
   {
@@ -59,13 +60,15 @@ function App() {
     return (
     <div className="app-display">
       <NavigationBar />
-      <main className="app-content centered">
-        <Routes>
-          {routes.map(({path, component}, key) => 
-            <Route path={path} element={component} key={key} />
-          )}
-        </Routes>
-      </main>
+      <UserFormProvider>
+        <main className="app-content centered">
+          <Routes>
+            {routes.map(({path, component}, key) => 
+              <Route path={path} element={component} key={key} />
+            )}
+          </Routes>
+        </main>
+      </UserFormProvider>
     </div>
   );
 }

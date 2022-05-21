@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     Avatar,
     Typography,
     Popover,
     Divider
-} from '@mui/material'
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from "../../contexts/user-context";
+import './Avatar.css';
 
-function AvatarComp(props) {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+function AvatarComp({ avatar }) {
+    const navigate = useNavigate();
+    const { userData, setUserData } = useContext(UserContext);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -16,6 +21,30 @@ function AvatarComp(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    // const handleJobPage = () => {
+    //     handleClose()
+    //     if(userData.user_type === 1) {
+    //         navigate("/admin-page")
+    //     } else if (userData.user_type === 2) {
+    //         navigate("/seeker-page")
+    //     }
+    // }
+
+    // const handleAccountPage = () => {
+    //     handleClose()
+    //     if(userData.user_type === 1) {
+    //         navigate("/admin-account")
+    //     } else if (userData.user_type === 2) {
+    //         navigate("/seeker-account")
+    //     }
+    // }
+
+    const logout = () => {
+        localStorage.clear();
+        setUserData(null);
+        navigate("/");
+    }
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -28,7 +57,7 @@ function AvatarComp(props) {
             className="user-avatar" 
             onClick={handleOpen} 
             src="">
-                H
+                X
             </Avatar>
             <Popover
             id={id}
@@ -40,9 +69,33 @@ function AvatarComp(props) {
                 horizontal: 'left',
             }}
             >
-                <Typography sx={{ p: 1 }}>Account Information</Typography>
+                {/* <Typography 
+                onClick={handleJobPage}
+                className="popover-button" 
+                sx={{ p: 1 }}
+                >
+                    Job List
+                </Typography>
+
                 <Divider />
-                <Typography sx={{ p: 1 }}>Log Out</Typography>
+
+                <Typography 
+                onClick={handleAccountPage}
+                className="popover-button" 
+                sx={{ p: 1 }}
+                >
+                    Account Information
+                </Typography>
+
+                <Divider /> */}
+                
+                <Typography 
+                className="popover-button" 
+                sx={{ p: 1 }}
+                onClick={logout}
+                >
+                    Log Out
+                </Typography>
             </Popover>
         </div>
     )
