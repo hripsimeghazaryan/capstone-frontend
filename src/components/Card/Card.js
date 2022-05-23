@@ -8,12 +8,12 @@ import {
     CardHeader
 } from '@mui/material';
 import './Card.css';
-
 import CardModal from '../Modal/Modal';
 
 function CardComponent({key, data}) {
     const [open, setOpen] = useState(false);
     const handleModal = () => setOpen(!open);
+    console.log(process.env["PUBLIC_URL"])
     return(
         <Card 
         key={key}
@@ -38,7 +38,7 @@ function CardComponent({key, data}) {
                     component="img"
                     alt="user image"
                     height="140"
-                    image={process.env.PUBLIC_URL + `/logoPgoto/${data.company.company_name}.png`} 
+                    image={`/logoPhoto/${data.company.company_name}.png`}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">

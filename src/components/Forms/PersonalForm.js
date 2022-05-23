@@ -32,7 +32,7 @@ function Personal({step, handleNext, handleEnable, disabled}) {
             user_type: userData.user_type,
             contact_number: phoneNumberHandler(data.contact_number)
         }
-
+        console.log(bodyData);
         const response = await requests.sendRequest("user-account/register", {method: "POST", body: bodyData});
         console.log(response);
         if(response.id) {
