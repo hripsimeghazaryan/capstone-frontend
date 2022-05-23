@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 import {
   Checkbox,
@@ -13,26 +13,30 @@ import Heading from '../components/Heading/Heading';
 import './LogInPage.css';
 import requests from '../utils/requests';
 import { UserContext } from '../contexts/user-context';
+import { setToken, tokenDecoder, hasToken, getToken } from '../utils/tokens';
 
 function LogInPage() {
     const [checked, setChecked] = useState(true);
     const [loginError, setLoginError] = useState(false);
     const { handleSubmit, control } = useForm();
     const navigate = useNavigate();
-    const { setUserData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
 
     const handleChange = (event) => setChecked(event.target.checked);
 
     const onSubmit = async (data) => {
-        const response = await requests.sendRequest("user-account/login", {method: "POST", body: data});
-        if(response.account_id) {
+        const response = await requests.login(data);
+        if(response.accessToken) {
+            const { accessToken } = response;
+            const decodedToken = tokenDecoder(accessToken);
             setLoginError(false)
-            localStorage.setItem("user_id", response.account_id);
-            setUserData(response);
-            if(response.user_type === 1) {
+            setToken(accessToken)
+            requests.setAuthToken(accessToken)
+            setUserData(decodedToken)
+            if(decodedToken.role === 1) {
                 navigate("/admin-page")
             }
-            if(response.user_type === 2) {
+            if(decodedToken.role === 2) {
                 navigate("/seeker-page")
             }
         } 

@@ -23,10 +23,11 @@ function Company({step, handleNext, disabled, handleEnable}) {
     const onSubmit = async (data) => {
         const bodyData = {
             ...data,
-            user_id: userData.account_id
+            userId: userData.user_id
         }
 
         const response = await requests.sendRequest("company/company", {method: "POST", body: bodyData});
+        console.log(response);
         if(response.id) {
             localStorage.setItem("company_id", response.id);
             setUserData({

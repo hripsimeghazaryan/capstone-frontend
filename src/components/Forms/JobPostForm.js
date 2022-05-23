@@ -11,21 +11,25 @@ import Buttons from "../Buttons/Buttons";
 import InputText from "../InputText/InputText";
 import InputDate from "../InputDate/InputDate";
 import InputMultiline from '../InputMultiline/InputMultiline';
+import { UserFormContext } from '../../contexts/user-form-data';
+import { useContext } from 'react';
 import requests from "../../utils/requests";
-import { updateNamespaceExportDeclaration } from "typescript";
 
 function JobPost({step, handleNext}) {
     const { handleSubmit, control } = useForm();
+    const { userFormData, setUserFormData } = useContext(UserFormContext);
 
     const onSubmit = async (data) => {
         const bodyData = {
             ...data,
-            company_id: localStorage.getItem("company_id")
+            companyId: localStorage.getItem("company_id"),
+            locationId: userFormData.location_id,
+            typeId: userFormData.type_id
         }
-        console.log(bodyData)
+
         const response = await requests.sendRequest("job-post/job", {method: "POST", body: bodyData});
         if(response.id) {
-            localStorage.setItem("job_id", response.id)
+            localStorage.setItem("job_id", response.id);
             handleNext(step);
         }
     }

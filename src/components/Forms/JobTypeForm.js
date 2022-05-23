@@ -12,6 +12,7 @@ import Buttons from '../Buttons/Buttons';
 import './Forms.css';
 import { UserFormContext } from '../../contexts/user-form-data';
 import { useContext } from 'react';
+import requests from "../../utils/requests";
 
 const types = ["Full-Time", "Part-Time", "Internship"];
 
@@ -20,17 +21,14 @@ function JobType({step, handleNext}) {
     const { userFormData, setUserFormData } = useContext(UserFormContext);
 
     const onSubmit = async (data) => {
-      setUserFormData({
-        ...userFormData,
-        job_type: {
-          url: "job-type",
-          data: {
-            ...data, 
-            job_id: localStorage.getItem("job_id")
-          }
-        }
-      })
-      handleNext(step);
+      const response = await requests.sendRequest("job-type", {method: "POST", body: data});
+      if(response.job_type_id) {
+        setUserFormData({
+          ...userFormData,
+          type_id: response.job_type_id
+        });
+        handleNext(step);
+      }
     };
 
     return (

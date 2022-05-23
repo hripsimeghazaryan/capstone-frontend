@@ -13,25 +13,25 @@ import './Forms.css';
 import skills from "../../constants/skills.json";
 import { UserFormContext } from '../../contexts/user-form-data';
 import { useContext } from 'react';
+import requests from '../../utils/requests';
+import { useNavigate } from 'react-router-dom';
 
-function JobSkills({step, handleNext}) {
+function JobSkills() {
     const [indexes, setIndexes] = React.useState([]);
     const [counter, setCounter] = React.useState(1);
     const { userFormData, setUserFormData } = useContext(UserFormContext);
     const { control, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        setUserFormData({
-            ...userFormData,
-            skill_set: {
-                url: "job-post-skills-set",
-                data: {
-                    skills: data,
-                    job_id: localStorage.getItem("job_id")
-                }
-            }
-        });
-        handleNext(step);
+        const bodyData = {
+            skills: data,
+            job_id: localStorage.getItem("job_id")
+        }
+        const response = await requests.sendRequest("job-post-skills-set", {method: "POST", body: bodyData});
+        if(response.status === "OK") {
+            navigate("/admin-page")
+        }
     };
 
     const addSkill = () => {

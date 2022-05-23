@@ -14,11 +14,6 @@ import CardModal from '../Modal/Modal';
 function CardComponent({key, data}) {
     const [open, setOpen] = useState(false);
     const handleModal = () => setOpen(!open);
-
-    const companyPosition="dscknsjdcnsjckncd";
-    const companyName="hdkbvfkjvbdfkbfdkjvvdfv";
-    const companyDescription = "This is a company recommended for you, if you want to consider it please apply here";
-
     return(
         <Card 
         key={key}
@@ -35,25 +30,23 @@ function CardComponent({key, data}) {
             onClick={handleModal}
             >
                 <CardHeader 
-                title={companyName}
-                subheader="September 14, 2016"/>
+                title={data.job_name}
+                subheader={data.company.company_name}
+                />
                 <CardMedia
                     className="card-image"
                     component="img"
                     alt="user image"
                     height="140"
-                    image="../img.jpeg"
+                    image={process.env.PUBLIC_URL + `/logoPgoto/${data.company.company_name}.png`} 
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                    {companyPosition}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                    {companyDescription}
+                    {data.job_description}
                     </Typography>
                 </CardContent>
             </ButtonBase>
-            <CardModal open={open} handleClose={handleModal}/>
+            <CardModal open={open} handleClose={handleModal} data={data} />
         </Card>
     );
 }

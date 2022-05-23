@@ -2,8 +2,9 @@ import { React } from "react";
 import {
     Modal,
     Box,
-    Typography
+    Typography,
 } from '@mui/material';
+import Heading from "../Heading/Heading";
 import Buttons from "../Buttons/Buttons";
 import { UserContext } from '../../contexts/user-context';
 import { useContext } from 'react';
@@ -22,36 +23,47 @@ const style = {
 };
 
 function CardModal(props) {
+    const { open, handleClose, data } = props;
     const { userData } = useContext(UserContext);
-    //const showButton = (userData.account_id === 1 ? true : false);
+    const showButton = (userData.role === 2 ? true : false);
 
-    // const applyToJob = async () => {
-    //     const body = {
-    //         job_id: props.job_id,
-    //         seeker_id: userData.account_id
-    //     }
-    //     const response = await requests.sendRequest("job-post-activity", {method: "POST, "})
-    // }
+    const applyToJob = async () => {
+        const body = {
+            job_id: data.id,
+            seeker_id: userData.id
+        }
+        const response = await requests.sendRequest("job-post-activity", {method: "POST", body: body});
+
+        if(response.id) {
+            handleClose();
+
+        }
+    }
 
     return (
         <Modal
         className="job-modal"
-        open={props.open}
-        onClose={props.handleClose}
+        open={open}
+        onClose={handleClose}
         >
         <Box sx={style}>
-            <Typography id="job-title" variant="h6" component="h2">
-            Text in a modal
+            <Heading title={data.job_name} divider={true} />
+            <Typography id="company-name" sx={{ mt: 2 }}>
+                Comapny: {data.company.company_name}
+            </Typography>
+            <Typography id="job-type" sx={{ mt: 2 }}>
+                Job Type: {data.type.job_type}
             </Typography>
             <Typography id="job-description" sx={{ mt: 2 }}>
-            {/* job-post.description */}
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                Job Description: {data.job_description}
             </Typography>
             <Typography id="job-skills" sx={{ mt: 2 }}>
-            {/* job-post.skills */}
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                {/* Required Skills: {data.skills} */}
             </Typography>
-            {/* {showButton && <Buttons name={"Apply"} />} */}
+            <Typography id="job-location" sx={{ mt: 2 }}>
+                Address: {data.location.street_address + ", " + data.location.city}
+            </Typography>
+            {showButton && <Buttons name={"Apply"} handleClick={applyToJob} />}
         </Box>
         </Modal>
     )

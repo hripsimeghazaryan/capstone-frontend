@@ -8,22 +8,22 @@ import JobSkills from '../components/Forms/JobPostSkills';
 import JobLocation from '../components/Forms/JobLocationForm';
 
 const steps = [
-        "Job Post",
         "Job Type",
-        "Job Skills",
-        "Job Location"
+        "Job Location",
+        "Job Post",
+        "Job Skills"
 ];
 
 function getStepContent(step, handleNext) {
     switch (step) {
         case 0:
-            return <JobPost step={step} handleNext={handleNext} />;
-        case 1:
             return <JobType step={step} handleNext={handleNext} />;
+        case 1:
+            return <JobLocation step={step} handleNext={handleNext} />;
         case 2: 
-            return <JobSkills step={step} handleNext={handleNext} />;
+            return <JobPost step={step} handleNext={handleNext} />;
         default: 
-            return <JobLocation />;
+            return <JobSkills />;
     }
 }
 
@@ -36,7 +36,7 @@ function AddJob() {
 
     return (
         <Box sx={{width: "50%"}}>
-            <Heading title={"Registration forms"} divider={true}/>
+            <Heading title={"Create Job Post"} divider={true}/>
             <StepperComponent 
             steps={steps} 
             activeStep={activeStep} 

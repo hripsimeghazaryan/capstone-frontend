@@ -23,13 +23,14 @@ function Skills({step, handleNext, disabled, handleEnable}) {
     const { control, handleSubmit } = useForm();
 
     const onSubmit = async (data) => {
+        console.log(userData);
         setUserFormData({
             ...userFormData,
             skill_set: {
                 url: "seeker-skill-set",
                 data: {
                     skills: data,
-                    user_id: userData.account_id
+                    user_id: userData.user_id
                 }
             }
         });

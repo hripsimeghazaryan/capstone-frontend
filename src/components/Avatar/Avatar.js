@@ -3,10 +3,11 @@ import {
     Avatar,
     Typography,
     Popover,
-    Divider
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../../contexts/user-context";
+import { removeToken } from '../../utils/tokens';
+import requests from '../../utils/requests';
 import './Avatar.css';
 
 function AvatarComp({ avatar }) {
@@ -22,27 +23,12 @@ function AvatarComp({ avatar }) {
         setAnchorEl(null);
     };
 
-    // const handleJobPage = () => {
-    //     handleClose()
-    //     if(userData.user_type === 1) {
-    //         navigate("/admin-page")
-    //     } else if (userData.user_type === 2) {
-    //         navigate("/seeker-page")
-    //     }
-    // }
-
-    // const handleAccountPage = () => {
-    //     handleClose()
-    //     if(userData.user_type === 1) {
-    //         navigate("/admin-account")
-    //     } else if (userData.user_type === 2) {
-    //         navigate("/seeker-account")
-    //     }
-    // }
-
     const logout = () => {
         localStorage.clear();
+        requests.setAuthToken("");
         setUserData(null);
+        removeToken();
+        handleClose()
         navigate("/");
     }
 
@@ -68,27 +54,7 @@ function AvatarComp({ avatar }) {
                 vertical: 'bottom',
                 horizontal: 'left',
             }}
-            >
-                {/* <Typography 
-                onClick={handleJobPage}
-                className="popover-button" 
-                sx={{ p: 1 }}
-                >
-                    Job List
-                </Typography>
-
-                <Divider />
-
-                <Typography 
-                onClick={handleAccountPage}
-                className="popover-button" 
-                sx={{ p: 1 }}
-                >
-                    Account Information
-                </Typography>
-
-                <Divider /> */}
-                
+            >                
                 <Typography 
                 className="popover-button" 
                 sx={{ p: 1 }}

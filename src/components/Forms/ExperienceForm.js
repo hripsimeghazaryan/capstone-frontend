@@ -12,6 +12,7 @@ import InputDate from "../InputDate/InputDate";
 import InputMultiline from '../InputMultiline/InputMultiline';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { tokenDecoder, getToken, setToken } from "../../utils/tokens";
 import './Forms.css';
 import { UserFormContext } from '../../contexts/user-form-data';
 import { UserContext } from '../../contexts/user-context';
@@ -22,7 +23,7 @@ import requests from "../../utils/requests";
 function Experience({disabled, handleEnable}) {
     const navigate = useNavigate();
     const { userFormData, setUserFormData } = useContext(UserFormContext);
-    const { userData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
     const { handleSubmit, control } = useForm();
 
     const handleRegister = async (data) => {
@@ -39,6 +40,25 @@ function Experience({disabled, handleEnable}) {
         for(const key in body) {
             const response = await requests.sendRequest(body[key].url, {method: "POST", body: body[key].data});
         }
+        const logData = {
+            email: userData.personal_info.email,
+            password: userData.personal_info.password
+        }
+        const login = await requests.login(logData).then(res => {
+            if(res.accessToken) {
+                const { accessToken } = res;
+                const decodedToken = tokenDecoder(accessToken);
+                setToken(accessToken)
+                requests.setAuthToken(accessToken)
+                setUserData(decodedToken)
+                localStorage.setItem("user_id", decodedToken.id);
+                setUserData({
+                    ...userData,
+                    id: decodedToken.id,
+                    role: decodedToken.role
+                })
+            }
+        });
         navigate("/seeker-page");
         setUserFormData(null);
     }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from 'react-router-dom';
 import {
     Paper,
     Divider
@@ -13,28 +12,19 @@ import requests from "../../utils/requests";
 import { UserFormContext } from '../../contexts/user-form-data';
 import { useContext } from 'react';
 
-function JobLocation() {
-    const navigate = useNavigate();
+function JobLocation({step, handleNext}) {
     const { handleSubmit, control } = useForm();
     const { userFormData, setUserFormData } = useContext(UserFormContext);
 
     const onSubmit = async (data) => {
-        const body = {
-            ...userFormData,
-            location: {
-                url: "job-location",
-                data: {
-                    ...data,
-                    job_id: localStorage.getItem("job_id")
-                }
-            }
+        const response = await requests.sendRequest("job-location", {method: "POST", body: data});
+        if(response.id) {
+            setUserFormData({
+                ...userFormData,
+                location_id: response.id
+            });
+            handleNext(step);
         }
-        console.log(body)
-        for(const key in body) {
-            const response = await requests.sendRequest(body[key].url, {method: "POST", body: body[key].data});
-        }
-        navigate("/admin-page");
-        setUserFormData(null);
     }
 
     return (

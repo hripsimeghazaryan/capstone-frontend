@@ -34,16 +34,16 @@ function Personal({step, handleNext, handleEnable, disabled}) {
         }
 
         const response = await requests.sendRequest("user-account/register", {method: "POST", body: bodyData});
-
-        if(response.account_id) {
-            localStorage.setItem("user_id", response.account_id);
+        console.log(response);
+        if(response.id) {
+            localStorage.setItem("user_id", response.id);
             setUserData({
                 ...userData,
                 personal_info: bodyData,
-                account_id: response.account_id
+                user_id: response.id
             });
+            (disabled !== undefined) ?  handleEnable() : handleNext(step)
         }
-        (disabled !== undefined) ?  handleEnable() : handleNext(step)
     }
     
     return (
