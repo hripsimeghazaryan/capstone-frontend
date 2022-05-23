@@ -5,7 +5,7 @@
 .card-component .card-list {
     display: flex;
     flex-direction: column;
-    min-width: 375px;
+    min-width: 340px;
     padding: 10px;
 }
 
